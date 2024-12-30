@@ -10,8 +10,13 @@
   gsap.registerPlugin(ScrollTrigger);
 
   // Camera store reactive variable
+  /**
+   * @type {{ zoom: number; }}
+   */
   let camera;
-  $: if ($cameraControls) {
+ // @ts-ignore
+   $: if ($cameraControls) {
+    // @ts-ignore
     camera = $cameraControls._camera;
   }
 
@@ -21,6 +26,8 @@
     ScrollTrigger.create({
       trigger: "#hero",
       start: "top center",
+      markers: true,
+      // @ts-ignore
       onEnter: () => $cameraControls.rotate(45 * DEG2RAD, 0, true)
     });
 
@@ -28,6 +35,8 @@
     ScrollTrigger.create({
       trigger: "#projects",
       start: "top center",
+      markers: true,
+      // @ts-ignore
       onEnter: () => $cameraControls.zoom(camera.zoom / 2, true)
     });
 
@@ -35,6 +44,8 @@
     ScrollTrigger.create({
       trigger: "#about",
       start: "top center",
+      markers: true,
+      // @ts-ignore
       onEnter: () => $cameraControls.moveTo(3, 5, 2, true)
     });
 
@@ -42,6 +53,8 @@
     ScrollTrigger.create({
       trigger: "#contact",
       start: "top center",
+      markers: true,
+      // @ts-ignore
       onEnter: () => $cameraControls.setLookAt(1, 2, 3, 1, 1, 0, true)
     });
   };
@@ -52,24 +65,28 @@
   });
 </script>
 
-<main>
-  <section id="hero" class="h-screen flex justify-center items-center bg-gray-200">
-    <h1 class="text-4xl font-bold">Hero Section</h1>
-  </section>
-  <section id="projects" class="h-screen flex justify-center items-center bg-gray-300">
-    <h2 class="text-3xl font-bold">Projects Section</h2>
-  </section>
-  <section id="about" class="h-screen flex justify-center items-center bg-gray-400">
-    <h3 class="text-3xl font-bold">About Section</h3>
-  </section>
-  <section id="contact" class="h-screen flex justify-center items-center bg-gray-500">
-    <h4 class="text-3xl font-bold">Contact Section</h4>
-  </section>
-
+<div class="fixed z-10 w-full h-screen">
   <Canvas>
     <Scene />
   </Canvas>
+</div>
+
+<main class="z-20">
+  <section id="hero" class="h-screen flex justify-center items-center">
+    <h1 class="text-4xl font-bold">Hero Section</h1>
+  </section>
+  <section id="projects" class="h-screen flex justify-center items-center">
+    <h2 class="text-3xl font-bold text-pink-600">Projects Section</h2>
+  </section>
+  <section id="about" class="h-screen flex justify-center items-center">
+    <h3 class="text-3xl font-bold">About Section</h3>
+  </section>
+  <section id="contact" class="h-screen flex justify-center items-center">
+    <h4 class="text-3xl font-bold">Contact Section</h4>
+  </section>
+
 </main>
+
 
 <style>
   main {

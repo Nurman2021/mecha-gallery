@@ -4,13 +4,10 @@
   import { cameraControls, mesh } from './camera/stores'
   import Mecha from './models/Mecha.svelte'
 
-  let rotation = 0
-  useFrame(() => {
-    rotation += 0.001
-  })
+ 
 </script>
 
-<T.Group rotation.y={rotation}>
+<T.Group>
   <T.PerspectiveCamera
     makeDefault
     position={[-10, 10, 10]}
