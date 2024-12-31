@@ -20,42 +20,85 @@
     camera = $cameraControls._camera;
   }
 
+  const cameraStates = {
+    hero: null,
+    projects: null,
+    about: null,
+    contact: null
+  };
+
+  const saveCameraState = (section) => {
+    cameraStates[section] = {
+      position: camera.position.clone(),
+      target: $cameraControls._target.clone(),
+      zoom: camera.zoom
+    };
+  };
+
+  const restoreCameraState = (section) => {
+    if (cameraStates[section]) {
+      const state = cameraStates[section];
+      $cameraControls.setLookAt(
+        state.position.x,
+        state.position.y,
+        state.position.z,
+        state.target.x,
+        state.target.y,
+        state.target.z,
+        true
+      );
+      $cameraControls.zoom(state.zoom, true);
+    }
+  };
+
   // GSAP ScrollTrigger setup
   const setupScrollTriggers = () => {
-    // Rotate camera
+    // Hero section
     ScrollTrigger.create({
       trigger: "#hero",
       start: "top center",
       markers: true,
-      // @ts-ignore
-      onEnter: () => $cameraControls.rotate(45 * DEG2RAD, 0, true)
+      onEnter: () => {
+        $cameraControls.rotate(45 * DEG2RAD, 0, true);
+        saveCameraState("hero");
+      },
+      onLeaveBack: () => restoreCameraState("hero")
     });
 
-    // Zoom in
+    // Projects section
     ScrollTrigger.create({
       trigger: "#projects",
       start: "top center",
       markers: true,
-      // @ts-ignore
-      onEnter: () => $cameraControls.zoom(camera.zoom / 2, true)
+      onEnter: () => {
+        $cameraControls.zoom(camera.zoom / 2, true);
+        saveCameraState("projects");
+      },
+      onLeaveBack: () => restoreCameraState("projects")
     });
 
-    // Move camera to position
+    // About section
     ScrollTrigger.create({
       trigger: "#about",
       start: "top center",
       markers: true,
-      // @ts-ignore
-      onEnter: () => $cameraControls.moveTo(3, 5, 2, true)
+      onEnter: () => {
+        $cameraControls.moveTo(3, 5, 2, true);
+        saveCameraState("about");
+      },
+      onLeaveBack: () => restoreCameraState("about")
     });
 
-    // Set look at specific target
+    // Contact section
     ScrollTrigger.create({
       trigger: "#contact",
       start: "top center",
       markers: true,
-      // @ts-ignore
-      onEnter: () => $cameraControls.setLookAt(1, 2, 3, 1, 1, 0, true)
+      onEnter: () => {
+        $cameraControls.setLookAt(1, 2, 3, 1, 1, 0, true);
+        saveCameraState("contact");
+      },
+      onLeaveBack: () => restoreCameraState("contact")
     });
   };
 
