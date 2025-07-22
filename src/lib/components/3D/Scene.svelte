@@ -3,6 +3,7 @@
   import CameraControls from "./camera/CameraControls.svelte";
   import { cameraControls } from "./camera/stores";
   import Mecha from "./models/Mecha.svelte";
+
 </script>
 
 <T.Group>
@@ -23,6 +24,7 @@
   </T.PerspectiveCamera>
 </T.Group>
 <Mecha />
+
 
 <!-- Floor -->
 <T.Mesh rotation.x={-Math.PI / 2} receiveShadow position.y={0.05}>

@@ -4,60 +4,93 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
 -->
 
 <script lang="ts">
-  import { onDestroy } from 'svelte';
-  import { Group } from 'three';
-  import { T, forwardEventHandlers } from '@threlte/core';
-  import { useGltf, useGltfAnimations } from '@threlte/extras';
-  import { idle, idlePose, run, channel } from '../animationState';
+  import { onDestroy } from "svelte";
+  import { Group } from "three";
+  import { T, forwardEventHandlers } from "@threlte/core";
+  import { useGltf, useGltfAnimations } from "@threlte/extras";
+  import { idle, idlePose, run, channel } from "../animationState";
 
-  export const ref = new Group()
+  export const ref = new Group();
 
-  let currentAnimation = 'Idle_Base';
+  let currentAnimation = "Idle_Base";
+  let isTransitioning = false;
 
-  const gltf = useGltf('/models/Mecha.glb')
-  export const { actions, mixer } = useGltfAnimations(gltf, ref)
-  $: $actions[currentAnimation]?.play()
+  const gltf = useGltf("/models/Mecha.glb");
+  export const { actions, mixer } = useGltfAnimations(gltf, ref);
 
-  const component = forwardEventHandlers()
-
-  function transitionTo(nextAnimation:string, duration = 1){
-      const currentAnim = $actions[currentAnimation]
-      const nextAnim = $actions[nextAnimation]
-      if (!nextAnim || currentAnim === nextAnim) return
-
-      nextAnim.enabled = true
-      if (currentAnim) {
-        currentAnim.crossFadeTo(nextAnim, duration, true)
-      }
-
-      nextAnim.play()
-      currentAnimation = nextAnimation
+  // Play current animation when it changes
+  $: if ($actions[currentAnimation] && !isTransitioning) {
+    $actions[currentAnimation]?.play();
   }
 
-  const subIdle = idle.subscribe(()=>{
-    transitionTo('Idle_Base', 0.3)
-  })
+  const component = forwardEventHandlers();
 
-  const subIdlePose = idlePose.subscribe(()=>{
-    transitionTo('Idle_Variant2', 0.3)
-  })
+  function transitionTo(nextAnimation: string, duration = 0.5) {
+    if (nextAnimation === currentAnimation || isTransitioning) return;
 
-  const subRun = run.subscribe(()=>{
-    transitionTo('Run_Haste', 0.3)
-  })
+    isTransitioning = true;
+    const currentAnim = $actions[currentAnimation];
+    const nextAnim = $actions[nextAnimation];
 
-  const subChannel = channel.subscribe(()=>{
-    transitionTo('Channel', 0.3)
-  })
+    if (!nextAnim) {
+      isTransitioning = false;
+      return;
+    }
 
+    // Stop all other animations first
+    Object.keys($actions).forEach((key) => {
+      if (key !== nextAnimation) {
+        $actions[key]?.stop();
+      }
+    });
 
-  onDestroy(()=>{
-    subIdle()
-    subRun()
-    subIdlePose()
-    subChannel()
-  })
+    nextAnim.reset().play();
 
+    if (currentAnim && currentAnim !== nextAnim) {
+      currentAnim.crossFadeTo(nextAnim, duration, false);
+
+      // Wait for transition to complete
+      setTimeout(() => {
+        currentAnimation = nextAnimation;
+        isTransitioning = false;
+      }, duration * 1000);
+    } else {
+      currentAnimation = nextAnimation;
+      isTransitioning = false;
+    }
+  }
+
+  // Animation state subscriptions
+  const subIdle = idle.subscribe((value) => {
+    if (value) {
+      transitionTo("Idle_Base", 0.3);
+    }
+  });
+
+  const subIdlePose = idlePose.subscribe((value) => {
+    if (value) {
+      transitionTo("Idle_Variant2", 0.3);
+    }
+  });
+
+  const subRun = run.subscribe((value) => {
+    if (value) {
+      transitionTo("Run_Haste", 0.3);
+    }
+  });
+
+  const subChannel = channel.subscribe((value) => {
+    if (value) {
+      transitionTo("Channel", 0.3);
+    }
+  });
+
+  onDestroy(() => {
+    subIdle();
+    subRun();
+    subIdlePose();
+    subChannel();
+  });
 </script>
 
 <T is={ref} dispose={false} {...$$restProps} bind:this={$component}>
@@ -65,7 +98,7 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
     <slot name="fallback" />
   {:then gltf}
     <T.Group name="Scene">
-      <T.Group name="model" rotation={[-Math.PI, 0, 0]} scale={-0.025} >
+      <T.Group name="model" rotation={[-Math.PI, 0, 0]} scale={-0.025}>
         <T is={gltf.nodes.Root} />
         <T is={gltf.nodes.C_Buffbone_Glb_Layout_Loc} />
         <T is={gltf.nodes.C_Buffbone_Glb_Center_Loc} />
@@ -84,7 +117,7 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
             material={gltf.materials.Sett_Skin01_MAT}
             skeleton={gltf.nodes.Mesh_0_1.skeleton}
           />
-         <!--  <T.SkinnedMesh
+          <!--  <T.SkinnedMesh
             name="Mesh_0_2"
             castShadow
             receiveShadow

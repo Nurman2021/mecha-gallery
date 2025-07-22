@@ -11,6 +11,7 @@
     idlePose,
     run,
     channel,
+    setActiveAnimation,
   } from "$lib/components/3D/animationState";
   import Swiper from "../UI/Swiper.svelte";
   import ProgressBar from "../UI/ProgressBar.svelte";
@@ -36,18 +37,22 @@
     ScrollTrigger.create({
       trigger: "#hero",
       start: "top center",
+      end: "bottom center",
       onEnter: () => {
         // @ts-ignore
         $cameraControls.reset(true);
-        $idle = true;
+        setActiveAnimation("idle");
       },
       onLeave: () => {
-        $idle = !$idle;
+        // Animation will be set by next section
       },
-      onLeaveBack: () => {
+      onEnterBack: () => {
         // @ts-ignore
         $cameraControls.reset(true);
-        $idle = true;
+        setActiveAnimation("idle");
+      },
+      onLeaveBack: () => {
+        // Animation will be set by previous section if any
       },
     });
 
@@ -55,22 +60,30 @@
     ScrollTrigger.create({
       trigger: "#projects",
       start: "top center",
+      end: "bottom center",
       onEnter: () => {
         // @ts-ignore
-
         $cameraControls.setPosition(-10, 12, 16, true);
         // @ts-ignore
         $cameraControls.moveTo(4, 0.5, -2, true);
 
-        $run = true;
+        setActiveAnimation("run");
       },
       onLeave: () => {
-        $run = !$run;
+        // Animation will be set by next section
+      },
+      onEnterBack: () => {
+        // @ts-ignore
+        $cameraControls.setPosition(-10, 12, 16, true);
+        // @ts-ignore
+        $cameraControls.moveTo(4, 0.5, -2, true);
+
+        setActiveAnimation("run");
       },
       onLeaveBack: () => {
         // @ts-ignore
         $cameraControls.reset(true);
-        $run = true;
+        setActiveAnimation("idle");
       },
     });
 
@@ -78,19 +91,33 @@
     ScrollTrigger.create({
       trigger: "#about",
       start: "center bottom",
+      end: "bottom center",
       onEnter: () => {
         // @ts-ignore
         $cameraControls.setPosition(5, 10, 20, true);
         // @ts-ignore
         $cameraControls.moveTo(-4, 2, 0, true);
 
-        $idlePose = true;
+        setActiveAnimation("idlePose");
       },
       onLeave: () => {
-        $idlePose = !$idlePose;
+        // Animation will be set by next section
+      },
+      onEnterBack: () => {
+        // @ts-ignore
+        $cameraControls.setPosition(5, 10, 20, true);
+        // @ts-ignore
+        $cameraControls.moveTo(-4, 2, 0, true);
+
+        setActiveAnimation("idlePose");
       },
       onLeaveBack: () => {
-        $idlePose = true;
+        // @ts-ignore
+        $cameraControls.setPosition(-10, 12, 16, true);
+        // @ts-ignore
+        $cameraControls.moveTo(4, 0.5, -2, true);
+
+        setActiveAnimation("run");
       },
     });
 
@@ -98,17 +125,29 @@
     ScrollTrigger.create({
       trigger: "#contact",
       start: "top center",
+      end: "bottom center",
       onEnter: () => {
         // @ts-ignore
         $cameraControls.moveTo(2, 2, -2, true);
 
-        $channel = true;
+        setActiveAnimation("channel");
       },
       onLeave: () => {
-        $channel = !$channel;
+        // Animation will be set if there's a next section
+      },
+      onEnterBack: () => {
+        // @ts-ignore
+        $cameraControls.moveTo(2, 2, -2, true);
+
+        setActiveAnimation("channel");
       },
       onLeaveBack: () => {
-        $channel = true;
+        // @ts-ignore
+        $cameraControls.setPosition(5, 10, 20, true);
+        // @ts-ignore
+        $cameraControls.moveTo(-4, 2, 0, true);
+
+        setActiveAnimation("idlePose");
       },
     });
   };
