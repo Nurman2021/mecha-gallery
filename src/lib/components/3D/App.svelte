@@ -1,6 +1,6 @@
 <script lang="ts">
   import gsap from "gsap";
-  import { onMount } from "svelte";
+  import { onMount, createEventDispatcher } from "svelte";
   import Scene from "./Scene.svelte";
   import { ChevronDown } from "lucide-svelte";
   import { Canvas } from "@threlte/core";
@@ -19,6 +19,8 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
+  const dispatch = createEventDispatcher();
+
   // Camera store reactive variable
   /**
    * @type {{ zoom: number; }}
@@ -35,6 +37,22 @@
   let currentSection = "hero";
   let isTransitioning = false;
   let scrollProgress = 0;
+  let sceneLoaded = false;
+
+  // Handle loading events from Scene
+  const handleLoadProgress = (event: any) => {
+    dispatch("loadProgress", event.detail);
+  };
+
+  const handleLoadComplete = () => {
+    sceneLoaded = true;
+    dispatch("loadComplete");
+
+    // Setup ScrollTriggers after scene is loaded
+    setTimeout(() => {
+      setupScrollTriggers();
+    }, 500);
+  };
 
   // GSAP ScrollTrigger setup
   const setupScrollTriggers = () => {
@@ -126,15 +144,18 @@
         $cameraControls.reset(true);
         setActiveAnimation("idle");
       },
-      scrub: 1,
+      scrub: false,
       onUpdate: (self) => {
         scrollProgress = self.progress;
 
-        // Dispatch event untuk swiper
+        // Only dispatch at specific intervals
+        const discreteProgress = Math.floor(self.progress * 10) / 10;
+
+        // Dispatch event untuk swiper dengan less frequent updates
         window.dispatchEvent(
           new CustomEvent("swiperScroll", {
             detail: {
-              progress: self.progress,
+              progress: discreteProgress,
               section: "projects",
             },
           })
@@ -243,9 +264,8 @@
     });
   };
 
-  onMount(() => {
-    setupScrollTriggers();
-  });
+  // Remove onMount that immediately calls setupScrollTriggers
+  // It will be called after scene is loaded
 
   // Reactive statements untuk debug dan tracking
   $: {
@@ -270,7 +290,10 @@
 
 <div class="fixed z-20 w-full h-screen">
   <Canvas>
-    <Scene />
+    <Scene
+      on:loadProgress={handleLoadProgress}
+      on:loadComplete={handleLoadComplete}
+    />
   </Canvas>
 </div>
 
@@ -281,8 +304,8 @@
     class:active={currentSection === "hero"}
   >
     <div class="flex justify-between w-1/2">
-      <p class="text-white font-bold font-druk text-sm">Let's <br /> Drive</p>
-      <p class="text-white font-bold font-druk text-sm">
+      <p class="text-white font-druk text-sm">Let's <br /> Drive</p>
+      <p class="text-white font-druk text-sm">
         I'm Painting <br /> on
         <span class="text-[#cc4f55]">&lt;canvas/&gt;</span>
       </p>
