@@ -10,7 +10,8 @@
     idle,
     idlePose,
     run,
-    channel,
+    respawn,
+    idleReady,
     setActiveAnimation,
   } from "$lib/components/3D/animationState";
   import Swiper from "../UI/Swiper.svelte";
@@ -310,11 +311,11 @@
         // @ts-ignore
         $cameraControls.moveTo(2, 2, -2, true);
 
-        setActiveAnimation("channel");
+        setActiveAnimation("respawn");
 
         console.log(
           "Entered contact section, active animation:",
-          $channel ? "channel" : "other"
+          $respawn ? "respawn" : "other"
         );
 
         setTimeout(() => {
@@ -331,7 +332,7 @@
         // @ts-ignore
         $cameraControls.moveTo(2, 2, -2, true);
 
-        setActiveAnimation("channel");
+        setActiveAnimation("respawn");
 
         setTimeout(() => {
           isTransitioning = false;
@@ -363,7 +364,8 @@
     if ($idle) console.log("Idle animation active");
     if ($run) console.log("Run animation active");
     if ($idlePose) console.log("IdlePose animation active");
-    if ($channel) console.log("Channel animation active");
+    if ($respawn) console.log("Respawn animation active");
+    if ($idleReady) console.log("IdleReady animation active");
   }
 
   $: {

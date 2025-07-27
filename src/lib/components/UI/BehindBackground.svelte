@@ -54,7 +54,7 @@
       </div>
     </div>
   {:else if $activeSection === "contact"}
-    <div class="w-3/5 flex h-screen justify-center p-4">
+    <div class="w-3/5 flex bg-[#68151D] h-screen justify-center p-4">
       <h1 class="text-outline text-9xl font-druk">
         L<br />E<br />T<br />S
       </h1>

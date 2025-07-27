@@ -8,7 +8,7 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
   import { Group } from "three";
   import { T, forwardEventHandlers } from "@threlte/core";
   import { useGltf, useGltfAnimations } from "@threlte/extras";
-  import { idle, idlePose, run, channel } from "../animationState";
+  import { idle, idlePose, run, respawn, idleReady } from "../animationState";
 
   export const ref = new Group();
 
@@ -46,6 +46,52 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
 
     nextAnim.reset().play();
 
+    // Special handling for Respawn animation
+    if (nextAnimation === "Respawn") {
+      // Set the animation to play only once (not loop)
+      nextAnim.setLoop(2201, 1); // LoopOnce = 2201
+      nextAnim.clampWhenFinished = true;
+
+      // Listen for animation finished event
+      const onFinished = () => {
+        // After Respawn finishes, transition to IdleReady
+        setTimeout(() => {
+          // Import setActiveAnimation dynamically to avoid circular imports
+          import("../animationState").then(({ setActiveAnimation }) => {
+            setActiveAnimation("idleReady");
+          });
+        }, 100);
+
+        // Remove the event listener
+        mixer.removeEventListener("finished", onFinished);
+      };
+
+      mixer.addEventListener("finished", onFinished);
+    }
+
+    // Special handling for IdleReady animation
+    if (nextAnimation === "IdleReady") {
+      // Set the animation to play only once (not loop)
+      nextAnim.setLoop(2201, 1); // LoopOnce = 2201
+      nextAnim.clampWhenFinished = true;
+
+      // Listen for animation finished event
+      const onIdleReadyFinished = () => {
+        // After IdleReady finishes, transition to Idle
+        setTimeout(() => {
+          // Import setActiveAnimation dynamically to avoid circular imports
+          import("../animationState").then(({ setActiveAnimation }) => {
+            setActiveAnimation("idle");
+          });
+        }, 100);
+
+        // Remove the event listener
+        mixer.removeEventListener("finished", onIdleReadyFinished);
+      };
+
+      mixer.addEventListener("finished", onIdleReadyFinished);
+    }
+
     if (currentAnim && currentAnim !== nextAnim) {
       currentAnim.crossFadeTo(nextAnim, duration, false);
 
@@ -79,9 +125,15 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
     }
   });
 
-  const subChannel = channel.subscribe((value) => {
+  const subChannel = respawn.subscribe((value) => {
     if (value) {
-      transitionTo("Channel", 0.3);
+      transitionTo("Respawn", 0.3);
+    }
+  });
+
+  const subIdleReady = idleReady.subscribe((value) => {
+    if (value) {
+      transitionTo("IdleReady", 0.3);
     }
   });
 
@@ -90,6 +142,7 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
     subRun();
     subIdlePose();
     subChannel();
+    subIdleReady();
   });
 </script>
 

@@ -25,6 +25,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@threlte/core": "^7.3.1",
     "@threlte/extras": "^8.12.0",
     "camera-controls": "^2.9.0",
