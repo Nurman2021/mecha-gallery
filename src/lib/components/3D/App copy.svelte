@@ -31,11 +31,6 @@
     camera = $cameraControls._camera;
   }
 
-  // State variables untuk tracking
-  let currentSection = "hero";
-  let isTransitioning = false;
-  let scrollProgress = 0;
-
   // GSAP ScrollTrigger setup
   const setupScrollTriggers = () => {
     // Hero section
@@ -44,35 +39,17 @@
       start: "top center",
       end: "bottom center",
       onEnter: () => {
-        currentSection = "hero";
-        isTransitioning = true;
         // @ts-ignore
         $cameraControls.reset(true);
         setActiveAnimation("idle");
-
-        // Debug log
-        console.log(
-          "Entered hero section, active animation:",
-          $idle ? "idle" : "other"
-        );
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
       },
       onLeave: () => {
         // Animation will be set by next section
       },
       onEnterBack: () => {
-        currentSection = "hero";
-        isTransitioning = true;
         // @ts-ignore
         $cameraControls.reset(true);
         setActiveAnimation("idle");
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
       },
       onLeaveBack: () => {
         // Animation will be set by previous section if any
@@ -85,41 +62,23 @@
       start: "top center",
       end: "bottom center",
       onEnter: () => {
-        currentSection = "projects";
-        isTransitioning = true;
         // @ts-ignore
         $cameraControls.setPosition(-10, 12, 16, true);
         // @ts-ignore
         $cameraControls.moveTo(4, 0.5, -2, true);
 
         setActiveAnimation("run");
-
-        // Debug log
-        console.log(
-          "Entered projects section, active animation:",
-          $run ? "run" : "other"
-        );
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
       },
       onLeave: () => {
         // Animation will be set by next section
       },
       onEnterBack: () => {
-        currentSection = "projects";
-        isTransitioning = true;
         // @ts-ignore
         $cameraControls.setPosition(-10, 12, 16, true);
         // @ts-ignore
         $cameraControls.moveTo(4, 0.5, -2, true);
 
         setActiveAnimation("run");
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
       },
       onLeaveBack: () => {
         // @ts-ignore
@@ -128,15 +87,9 @@
       },
       scrub: 1,
       onUpdate: (self) => {
-        scrollProgress = self.progress;
-
-        // Dispatch event untuk swiper
         window.dispatchEvent(
           new CustomEvent("swiperScroll", {
-            detail: {
-              progress: self.progress,
-              section: "projects",
-            },
+            detail: { progress: self.progress },
           })
         );
       },
@@ -148,41 +101,23 @@
       start: "center bottom",
       end: "bottom center",
       onEnter: () => {
-        currentSection = "about";
-        isTransitioning = true;
         // @ts-ignore
         $cameraControls.setPosition(5, 10, 20, true);
         // @ts-ignore
         $cameraControls.moveTo(-4, 2, 0, true);
 
         setActiveAnimation("idlePose");
-
-        // Debug log
-        console.log(
-          "Entered about section, active animation:",
-          $idlePose ? "idlePose" : "other"
-        );
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
       },
       onLeave: () => {
         // Animation will be set by next section
       },
       onEnterBack: () => {
-        currentSection = "about";
-        isTransitioning = true;
         // @ts-ignore
         $cameraControls.setPosition(5, 10, 20, true);
         // @ts-ignore
         $cameraControls.moveTo(-4, 2, 0, true);
 
         setActiveAnimation("idlePose");
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
       },
       onLeaveBack: () => {
         // @ts-ignore
@@ -200,37 +135,19 @@
       start: "top center",
       end: "bottom center",
       onEnter: () => {
-        currentSection = "contact";
-        isTransitioning = true;
         // @ts-ignore
         $cameraControls.moveTo(2, 2, -2, true);
 
         setActiveAnimation("channel");
-
-        // Debug log
-        console.log(
-          "Entered contact section, active animation:",
-          $channel ? "channel" : "other"
-        );
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
       },
       onLeave: () => {
         // Animation will be set if there's a next section
       },
       onEnterBack: () => {
-        currentSection = "contact";
-        isTransitioning = true;
         // @ts-ignore
         $cameraControls.moveTo(2, 2, -2, true);
 
         setActiveAnimation("channel");
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
       },
       onLeaveBack: () => {
         // @ts-ignore
@@ -246,26 +163,6 @@
   onMount(() => {
     setupScrollTriggers();
   });
-
-  // Reactive statements untuk debug dan tracking
-  $: {
-    if (currentSection) {
-      console.log("Current section:", currentSection);
-    }
-  }
-
-  $: {
-    if ($idle) console.log("Idle animation active");
-    if ($run) console.log("Run animation active");
-    if ($idlePose) console.log("IdlePose animation active");
-    if ($channel) console.log("Channel animation active");
-  }
-
-  $: {
-    if (scrollProgress > 0) {
-      console.log("Scroll progress:", scrollProgress);
-    }
-  }
 </script>
 
 <div class="fixed z-20 w-full h-screen">
@@ -278,7 +175,6 @@
   <section
     id="hero"
     class="h-screen flex flex-col relative justify-center items-center"
-    class:active={currentSection === "hero"}
   >
     <div class="flex justify-between w-1/2">
       <p class="text-white font-bold font-druk text-sm">Let's <br /> Drive</p>
@@ -295,34 +191,21 @@
       <ChevronDown size={24} />
     </p>
   </section>
-
-  <section
-    id="projects"
-    class="h-screen flex justify-center items-center"
-    class:active={currentSection === "projects"}
-  >
+  <section id="projects" class="h-screen flex justify-center items-center">
     <div class="w-3/5 flex"></div>
     <div class="w-2/5">
       <Swiper />
     </div>
   </section>
-
-  <section
-    id="about"
-    class="h-screen flex"
-    class:active={currentSection === "about"}
-  >
+  <section id="about" class="h-screen flex">
     <ProgressBar />
     <div class="w-1/2"></div>
   </section>
-
-  <section
-    id="contact"
-    class="h-screen flex justify-center items-center"
-    class:active={currentSection === "contact"}
-  >
+  <section id="contact" class="h-screen flex justify-center items-center">
     <div class="w-2/5 flex"></div>
+    <!-- <div class="w-2/5"> -->
     <ContactCard />
+    <!-- </div> -->
   </section>
 </main>
 
@@ -330,18 +213,11 @@
   main {
     position: relative;
   }
-
   section {
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    transition: opacity 0.3s ease;
-  }
-
-  section.active {
-    /* Styling untuk section yang aktif */
-    opacity: 1;
   }
 </style>

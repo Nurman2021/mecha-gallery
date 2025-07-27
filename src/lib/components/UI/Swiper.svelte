@@ -1,4 +1,7 @@
 <script>
+  // @ts-nocheck
+
+  import { onMount } from "svelte";
   // @ts-ignore
   import { Navigation, Pagination, A11y } from "swiper";
   import { Swiper, SwiperSlide } from "swiper/svelte";
@@ -6,121 +9,189 @@
 
   import "swiper/css";
   import "swiper/css/navigation";
+
+  // @ts-ignore
+  let swiperInstance;
+  // @ts-ignore
+  let swiperContainer;
+  let isScrolling = false;
+  let currentIndex = 0;
+  const totalSlides = 4;
+
+  onMount(() => {
+    // Handle wheel scroll (existing)
+    const handleWheel = (e) => {
+      if (!swiperInstance || isScrolling) return;
+
+      e.preventDefault();
+      isScrolling = true;
+
+      if (e.deltaY > 0) {
+        swiperInstance.slideNext();
+      } else {
+        swiperInstance.slidePrev();
+      }
+
+      setTimeout(() => {
+        isScrolling = false;
+      }, 500);
+    };
+
+    // Handle custom scroll event from ScrollTrigger
+    const handleSwiperScroll = (e) => {
+      if (!swiperInstance || isScrolling) return;
+
+      const progress = e.detail.progress;
+      const targetIndex = Math.floor(progress * (totalSlides - 1));
+
+      if (targetIndex !== currentIndex) {
+        currentIndex = targetIndex;
+        swiperInstance.slideTo(currentIndex, 600); // 600ms transition
+      }
+    };
+
+    // Add event listeners
+    if (swiperContainer) {
+      swiperContainer.addEventListener("wheel", handleWheel, {
+        passive: false,
+      });
+    }
+
+    // Listen for custom scroll event
+    window.addEventListener("swiperScroll", handleSwiperScroll);
+
+    return () => {
+      if (swiperContainer) {
+        swiperContainer.removeEventListener("wheel", handleWheel);
+      }
+      window.removeEventListener("swiperScroll", handleSwiperScroll);
+    };
+  });
 </script>
 
-<Swiper
-  modules={[Navigation, Pagination, A11y]}
-  spaceBetween={1}
-  slidesPerView={2}
-  navigation
-  pagination={{ clickable: true }}
->
-  <SwiperSlide>
-    <div class="p-4 text-left text-white">
-      <div class="flex gap-3 mb-4">
-        <i class="devicon-css3-plain"></i>
-        <i class="devicon-threejs-original"></i>
-        <i class="devicon-javascript-plain"></i>
-        <i class="devicon-photoshop-plain"></i>
+<div bind:this={swiperContainer}>
+  <Swiper
+    modules={[Navigation, Pagination, A11y]}
+    spaceBetween={1}
+    slidesPerView={2}
+    navigation
+    pagination={{ clickable: true }}
+    allowTouchMove={true}
+    on:swiper={(e) => {
+      swiperInstance = e.detail[0];
+    }}
+    on:slideChange={(e) => {
+      // Update currentIndex when slide changes manually
+      currentIndex = e.detail[0].activeIndex;
+    }}
+  >
+    <SwiperSlide>
+      <div class="p-4 text-left text-white">
+        <div class="flex gap-3 mb-4">
+          <i class="devicon-css3-plain"></i>
+          <i class="devicon-threejs-original"></i>
+          <i class="devicon-javascript-plain"></i>
+          <i class="devicon-photoshop-plain"></i>
+        </div>
+        <p class="text-xs">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam,
+          deleniti? Sunt fugit doloribus eius repudiandae
+        </p>
+        <img src="/images/porto/starwars.png" alt="project" />
+        <h1 class="font-druk text-white text-sm text-left">Starwars Helmet</h1>
+        <a
+          href="https://starwars-helmet.vercel.app/"
+          target="_blank"
+          class="flex gap-2 items-center"><MoveUpRight size={12} />Live site</a
+        >
+        <a
+          href="https://github.com/Nurman2021/starwars-helmet"
+          target="_blank"
+          class="flex gap-2 items-center"><MoveUpRight size={12} />Repository</a
+        >
       </div>
-      <p class="text-xs">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam,
-        deleniti? Sunt fugit doloribus eius repudiandae
-      </p>
-      <img src="/images/porto/starwars.png" alt="project" />
-      <h1 class="font-druk text-white text-sm text-left">Starwars Helmet</h1>
-      <a
-        href="https://starwars-helmet.vercel.app/"
-        target="_blank"
-        class="flex gap-2 items-center"><MoveUpRight size={12} />Live site</a
-      >
-      <a
-        href="https://github.com/Nurman2021/starwars-helmet"
-        target="_blank"
-        class="flex gap-2 items-center"><MoveUpRight size={12} />Repository</a
-      >
-    </div>
-  </SwiperSlide>
-  <SwiperSlide>
-    <div class="p-4 text-left text-white">
-      <div class="flex gap-3 mb-4">
-        <i class="devicon-supabase-plain"></i>
-        <i class="devicon-tailwindcss-original"></i>
-        <i class="devicon-svelte-plain"></i>
-        <i class="devicon-vercel-original"></i>
+    </SwiperSlide>
+    <SwiperSlide>
+      <div class="p-4 text-left text-white">
+        <div class="flex gap-3 mb-4">
+          <i class="devicon-supabase-plain"></i>
+          <i class="devicon-tailwindcss-original"></i>
+          <i class="devicon-svelte-plain"></i>
+          <i class="devicon-vercel-original"></i>
+        </div>
+        <p class="text-xs">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam,
+          deleniti? Sunt fugit doloribus eius repudiandae
+        </p>
+        <img src="/images/porto/derma.png" alt="project" />
+        <h1 class="font-druk text-sm">Dermasense</h1>
+        <a
+          href="https://www.dermasense.skin"
+          target="_blank"
+          class="flex items-center gap-2"
+        >
+          <MoveUpRight size={12} />
+          Live site</a
+        >
+        <a
+          href="https://github.com/Nurman2021/dermasense_web_app"
+          target="_blank"
+          class="flex gap-2 items-center"><MoveUpRight size={12} />Repository</a
+        >
       </div>
-      <p class="text-xs">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam,
-        deleniti? Sunt fugit doloribus eius repudiandae
-      </p>
-      <img src="/images/porto/derma.png" alt="project" />
-      <h1 class="font-druk text-sm">Dermasense</h1>
-      <a
-        href="https://www.dermasense.skin"
-        target="_blank"
-        class="flex items-center gap-2"
-      >
-        <MoveUpRight size={12} />
-        Live site</a
-      >
-      <a
-        href="https://github.com/Nurman2021/dermasense_web_app"
-        target="_blank"
-        class="flex gap-2 items-center"><MoveUpRight size={12} />Repository</a
-      >
-    </div>
-  </SwiperSlide>
-  <SwiperSlide>
-    <div class="p-4 text-left text-white">
-      <div class="flex gap-3 mb-4">
-        <i class="devicon-tailwindcss-original"></i>
-        <i class="devicon-svelte-plain"></i>
-        <i class="devicon-threejs-original"></i>
+    </SwiperSlide>
+    <SwiperSlide>
+      <div class="p-4 text-left text-white">
+        <div class="flex gap-3 mb-4">
+          <i class="devicon-tailwindcss-original"></i>
+          <i class="devicon-svelte-plain"></i>
+          <i class="devicon-threejs-original"></i>
+        </div>
+        <p class="text-xs">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam,
+          deleniti? Sunt fugit doloribus eius repudiandae
+        </p>
+        <img src="/images/porto/algo.png" alt="project" />
+        <h1 class="font-druk text-sm">Algo Coffee</h1>
+        <a
+          href=" https://algo-coffee.vercel.app/"
+          target="_blank"
+          class="flex gap-2 items-center"><MoveUpRight size={12} />Live site</a
+        >
+        <a
+          href="https://github.com/Nurman2021/algoCoffee"
+          target="_blank"
+          class="flex gap-2 items-center"><MoveUpRight size={12} />Repository</a
+        >
       </div>
-      <p class="text-xs">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam,
-        deleniti? Sunt fugit doloribus eius repudiandae
-      </p>
-      <img src="/images/porto/algo.png" alt="project" />
-      <h1 class="font-druk text-sm">Algo Coffee</h1>
-      <a
-        href=" https://algo-coffee.vercel.app/"
-        target="_blank"
-        class="flex gap-2 items-center"><MoveUpRight size={12} />Live site</a
-      >
-      <a
-        href="https://github.com/Nurman2021/algoCoffee"
-        target="_blank"
-        class="flex gap-2 items-center"><MoveUpRight size={12} />Repository</a
-      >
-    </div>
-  </SwiperSlide>
-  <SwiperSlide>
-    <div class="p-4 text-white text-left">
-      <div class="flex gap-3 mb-4">
-        <i class="devicon-tailwindcss-original"></i>
-        <i class="devicon-antdesign-plain"></i>
-        <i class="devicon-nextjs-plain"></i>
+    </SwiperSlide>
+    <SwiperSlide>
+      <div class="p-4 text-white text-left">
+        <div class="flex gap-3 mb-4">
+          <i class="devicon-tailwindcss-original"></i>
+          <i class="devicon-antdesign-plain"></i>
+          <i class="devicon-nextjs-plain"></i>
+        </div>
+        <p class="text-xs">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam,
+          deleniti? Sunt fugit doloribus eius repudiandae
+        </p>
+        <img src="/images/porto/zafa.png" alt="project" />
+        <h1 class="font-druk text-sm">Zafa Clone</h1>
+        <a
+          href="https://algo-coffee.vercel.app/"
+          target="_blank"
+          class="flex gap-2 items-center"><MoveUpRight size={12} />Live site</a
+        >
+        <a
+          href="https://github.com/Nurman2021/zafatrans-clone"
+          target="_blank"
+          class="flex gap-2 items-center"><MoveUpRight size={12} />Repository</a
+        >
       </div>
-      <p class="text-xs">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam,
-        deleniti? Sunt fugit doloribus eius repudiandae
-      </p>
-      <img src="/images/porto/zafa.png" alt="project" />
-      <h1 class="font-druk text-sm">Zafa Clone</h1>
-      <a
-        href="https://algo-coffee.vercel.app/"
-        target="_blank"
-        class="flex gap-2 items-center"><MoveUpRight size={12} />Live site</a
-      >
-      <a
-        href="https://github.com/Nurman2021/zafatrans-clone"
-        target="_blank"
-        class="flex gap-2 items-center"><MoveUpRight size={12} />Repository</a
-      >
-    </div>
-  </SwiperSlide>
-</Swiper>
+    </SwiperSlide>
+  </Swiper>
+</div>
 <svg xmlns="http://www.w3.org/2000/svg"
   ><filter id="svgGradientMap"
     ><fecolormatrix type="saturate" values="0" /><feComponentTransfer
