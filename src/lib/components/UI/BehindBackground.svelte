@@ -14,7 +14,7 @@
 
   const sections: Section[] = [
     { id: "#hero", element: "hero" },
-    { id: "#projects", element: "project" },
+    { id: "#projects", element: "projects" },
     { id: "#about", element: "about" },
     { id: "#contact", element: "contact" },
   ];
@@ -36,14 +36,14 @@
 <div class="text-center fixed z-10 w-full">
   {#if $activeSection === "hero"}
     <h1 class="text-white text-[8.5rem] font-extrabold font-druk">HELLO;</h1>
-  {:else if $activeSection === "project"}
+  {:else if $activeSection === "projects"}
     <div class="w-3/5 flex h-screen justify-end bg-[#68151D] p-4">
       <h1 class="text-outline text-9xl font-druk">PRO<br />JECT</h1>
     </div>
   {:else if $activeSection === "about"}
     <div class="flex mt-4">
       <div class="w-3/5 flex"></div>
-      <div class="w-2/5 flex h-screen bg-[#0f0f17]p-4">
+      <div class="w-2/5 flex h-screen p-4">
         <h1 class="text-outline-red text-7xl font-druk">
           C<br />O<br />D<br />I<br />N<br />G
         </h1>

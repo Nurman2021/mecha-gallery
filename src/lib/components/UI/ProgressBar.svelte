@@ -1,32 +1,51 @@
-<div class="space-y-6 text-white text-left w-full p-6">
-  <div>
-    <p class="text-lg font-bold">Svelte</p>
-    <div class="bg-gray-200 w-3/4 h-3 rounded-full overflow-hidden">
-      <div class="bg-red-500 h-full w-3/4"></div>
+<div class="w-full max-w-lg">
+  <h2 class="text-white font-druk text-2xl mb-8 text-left">ABOUT ME</h2>
+  <div class="space-y-6 text-white text-left">
+    <div>
+      <p class="text-lg font-bold mb-2">Svelte</p>
+      <div class="bg-gray-200 w-full h-5 rounded-full overflow-hidden relative">
+        <div
+          class="bg-red-500 h-full w-3/4 transition-all duration-1000 ease-out flex items-center justify-end pr-2"
+        >
+          <span class="text-xs font-semibold text-white">75%</span>
+        </div>
+      </div>
     </div>
-  </div>
-  <div>
-    <p class="text-lg font-bold">Photoshop</p>
-    <div class="bg-gray-200 w-3/4 h-3 rounded-full overflow-hidden">
-      <div class="bg-red-500 h-full w-2/4"></div>
+    <div>
+      <p class="text-lg font-bold mb-2">Photoshop</p>
+      <div class="bg-gray-200 w-full h-5 rounded-full overflow-hidden relative">
+        <div
+          class="bg-red-500 h-full w-2/4 transition-all duration-1000 ease-out delay-200 flex items-center justify-end pr-2"
+        >
+          <span class="text-xs font-semibold text-white">50%</span>
+        </div>
+      </div>
     </div>
-  </div>
-  <div>
-    <p class="text-lg font-bold">Css</p>
-    <div class="bg-gray-200 w-3/4 h-3 rounded-full overflow-hidden">
-      <div class="bg-red-500 h-full w-4/5"></div>
+    <div>
+      <p class="text-lg font-bold mb-2">CSS</p>
+      <div class="bg-gray-200 w-full h-5 rounded-full overflow-hidden relative">
+        <div class="bg-red-500 h-full w-4/5 flex items-center justify-end pr-2">
+          <span class="text-xs font-semibold text-white">80%</span>
+        </div>
+      </div>
     </div>
-  </div>
-  <div>
-    <p class="text-lg font-bold">Tailwind</p>
-    <div class="bg-gray-200 w-3/4 h-3 rounded-full overflow-hidden">
-      <div class="bg-red-500 h-full w-full"></div>
+    <div>
+      <p class="text-lg font-bold mb-2">Tailwind</p>
+      <div class="bg-gray-700 w-full h-5 rounded-full overflow-hidden relative">
+        <div
+          class="bg-red-500 h-full w-full flex items-center justify-end pr-2"
+        >
+          <span class="text-xs font-semibold text-white">100%</span>
+        </div>
+      </div>
     </div>
-  </div>
-  <div>
-    <p class="text-lg font-bold">NextJS</p>
-    <div class="bg-gray-200 w-3/4 h-3 rounded-full overflow-hidden">
-      <div class="bg-red-500 h-full w-1/4"></div>
+    <div>
+      <p class="text-lg font-bold mb-2">NextJS</p>
+      <div class="bg-gray-200 w-full h-5 rounded-full overflow-hidden relative">
+        <div class="bg-red-500 h-full w-1/4 flex items-center justify-end pr-2">
+          <span class="text-xs font-bold text-white">25%</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

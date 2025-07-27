@@ -39,6 +39,12 @@
   let scrollProgress = 0;
   let sceneLoaded = false;
 
+  // Section elements for GSAP transitions
+  let heroSection: HTMLElement;
+  let projectsSection: HTMLElement;
+  let aboutSection: HTMLElement;
+  let contactSection: HTMLElement;
+
   // Handle loading events from Scene
   const handleLoadProgress = (event: any) => {
     dispatch("loadProgress", event.detail);
@@ -51,7 +57,71 @@
     // Setup ScrollTriggers after scene is loaded
     setTimeout(() => {
       setupScrollTriggers();
+      initializeSectionAnimations();
     }, 500);
+  };
+
+  // Initialize section animations
+  const initializeSectionAnimations = () => {
+    // Set initial states - hide all sections except hero
+    gsap.set([projectsSection, aboutSection, contactSection], {
+      opacity: 0,
+      y: 50,
+    });
+
+    // Set hero as visible
+    gsap.set(heroSection, {
+      opacity: 1,
+      y: 0,
+    });
+
+    // Animate in individual elements of hero section
+    gsap.fromTo(
+      heroSection.querySelectorAll(".animate-in"),
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "power2.out",
+        delay: 0.8,
+      }
+    );
+  };
+
+  // Enhanced section transition
+  const animateSection = (section: HTMLElement, show: boolean = true) => {
+    if (show) {
+      gsap.to(section, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+
+      // Animate individual elements
+      const elements = section.querySelectorAll(".animate-in");
+      gsap.fromTo(
+        elements,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+          delay: 0.3,
+        }
+      );
+    } else {
+      gsap.to(section, {
+        opacity: 0,
+        y: -30,
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
+    }
   };
 
   // GSAP ScrollTrigger setup
@@ -62,13 +132,15 @@
       start: "top center",
       end: "bottom center",
       onEnter: () => {
-        currentSection = "hero";
+        if (currentSection !== "hero") {
+          currentSection = "hero";
+          animateSection(heroSection, true);
+        }
         isTransitioning = true;
         // @ts-ignore
         $cameraControls.reset(true);
         setActiveAnimation("idle");
 
-        // Debug log
         console.log(
           "Entered hero section, active animation:",
           $idle ? "idle" : "other"
@@ -79,10 +151,11 @@
         }, 1000);
       },
       onLeave: () => {
-        // Animation will be set by next section
+        animateSection(heroSection, false);
       },
       onEnterBack: () => {
         currentSection = "hero";
+        animateSection(heroSection, true);
         isTransitioning = true;
         // @ts-ignore
         $cameraControls.reset(true);
@@ -93,7 +166,7 @@
         }, 1000);
       },
       onLeaveBack: () => {
-        // Animation will be set by previous section if any
+        animateSection(heroSection, false);
       },
     });
 
@@ -103,7 +176,10 @@
       start: "top center",
       end: "bottom center",
       onEnter: () => {
-        currentSection = "projects";
+        if (currentSection !== "projects") {
+          currentSection = "projects";
+          animateSection(projectsSection, true);
+        }
         isTransitioning = true;
         // @ts-ignore
         $cameraControls.setPosition(-10, 12, 16, true);
@@ -112,7 +188,6 @@
 
         setActiveAnimation("run");
 
-        // Debug log
         console.log(
           "Entered projects section, active animation:",
           $run ? "run" : "other"
@@ -123,10 +198,11 @@
         }, 1000);
       },
       onLeave: () => {
-        // Animation will be set by next section
+        animateSection(projectsSection, false);
       },
       onEnterBack: () => {
         currentSection = "projects";
+        animateSection(projectsSection, true);
         isTransitioning = true;
         // @ts-ignore
         $cameraControls.setPosition(-10, 12, 16, true);
@@ -140,6 +216,7 @@
         }, 1000);
       },
       onLeaveBack: () => {
+        animateSection(projectsSection, false);
         // @ts-ignore
         $cameraControls.reset(true);
         setActiveAnimation("idle");
@@ -169,7 +246,10 @@
       start: "center bottom",
       end: "bottom center",
       onEnter: () => {
-        currentSection = "about";
+        if (currentSection !== "about") {
+          currentSection = "about";
+          animateSection(aboutSection, true);
+        }
         isTransitioning = true;
         // @ts-ignore
         $cameraControls.setPosition(5, 10, 20, true);
@@ -178,7 +258,6 @@
 
         setActiveAnimation("idlePose");
 
-        // Debug log
         console.log(
           "Entered about section, active animation:",
           $idlePose ? "idlePose" : "other"
@@ -189,10 +268,11 @@
         }, 1000);
       },
       onLeave: () => {
-        // Animation will be set by next section
+        animateSection(aboutSection, false);
       },
       onEnterBack: () => {
         currentSection = "about";
+        animateSection(aboutSection, true);
         isTransitioning = true;
         // @ts-ignore
         $cameraControls.setPosition(5, 10, 20, true);
@@ -206,6 +286,7 @@
         }, 1000);
       },
       onLeaveBack: () => {
+        animateSection(aboutSection, false);
         // @ts-ignore
         $cameraControls.setPosition(-10, 12, 16, true);
         // @ts-ignore
@@ -221,14 +302,16 @@
       start: "top center",
       end: "bottom center",
       onEnter: () => {
-        currentSection = "contact";
+        if (currentSection !== "contact") {
+          currentSection = "contact";
+          animateSection(contactSection, true);
+        }
         isTransitioning = true;
         // @ts-ignore
         $cameraControls.moveTo(2, 2, -2, true);
 
         setActiveAnimation("channel");
 
-        // Debug log
         console.log(
           "Entered contact section, active animation:",
           $channel ? "channel" : "other"
@@ -239,10 +322,11 @@
         }, 1000);
       },
       onLeave: () => {
-        // Animation will be set if there's a next section
+        animateSection(contactSection, false);
       },
       onEnterBack: () => {
         currentSection = "contact";
+        animateSection(contactSection, true);
         isTransitioning = true;
         // @ts-ignore
         $cameraControls.moveTo(2, 2, -2, true);
@@ -254,6 +338,7 @@
         }, 1000);
       },
       onLeaveBack: () => {
+        animateSection(contactSection, false);
         // @ts-ignore
         $cameraControls.setPosition(5, 10, 20, true);
         // @ts-ignore
@@ -297,22 +382,23 @@
   </Canvas>
 </div>
 
-<main class="z-30">
+<main class="relative z-30">
   <section
+    bind:this={heroSection}
     id="hero"
     class="h-screen flex flex-col relative justify-center items-center"
     class:active={currentSection === "hero"}
   >
     <div class="flex justify-between w-1/2">
-      <p class="text-white font-druk text-sm">Let's <br /> Drive</p>
-      <p class="text-white font-druk text-sm">
+      <p class="text-white font-druk text-sm animate-in">Let's <br /> Drive</p>
+      <p class="text-white font-druk text-sm animate-in">
         I'm Painting <br /> on
         <span class="text-[#cc4f55]">&lt;canvas/&gt;</span>
       </p>
     </div>
 
     <p
-      class="text-white font-light bottom-0 flex flex-col items-center absolute animate-bounce"
+      class="text-white font-light bottom-0 flex flex-col items-center absolute animate-bounce animate-in"
     >
       Scroll down
       <ChevronDown size={24} />
@@ -320,32 +406,39 @@
   </section>
 
   <section
+    bind:this={projectsSection}
     id="projects"
     class="h-screen flex justify-center items-center"
     class:active={currentSection === "projects"}
   >
-    <div class="w-3/5 flex"></div>
-    <div class="w-2/5">
+    <div class="w-3/5 flex animate-in"></div>
+    <div class="w-2/5 animate-in">
       <Swiper />
     </div>
   </section>
 
   <section
+    bind:this={aboutSection}
     id="about"
-    class="h-screen flex"
+    class="h-screen flex justify-center items-center"
     class:active={currentSection === "about"}
   >
-    <ProgressBar />
-    <div class="w-1/2"></div>
+    <div class="w-1/2 animate-in flex justify-center">
+      <ProgressBar />
+    </div>
+    <div class="w-1/2 animate-in"></div>
   </section>
 
   <section
+    bind:this={contactSection}
     id="contact"
     class="h-screen flex justify-center items-center"
     class:active={currentSection === "contact"}
   >
-    <div class="w-2/5 flex"></div>
-    <ContactCard />
+    <div class="w-2/5 flex animate-in"></div>
+    <div class="animate-in">
+      <ContactCard />
+    </div>
   </section>
 </main>
 
@@ -366,5 +459,24 @@
   section.active {
     /* Styling untuk section yang aktif */
     opacity: 1;
+  }
+
+  /* Classes for GSAP animations */
+  .animate-in {
+    /* Initial state for GSAP animations */
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  /* Debug indicator (optional) */
+  section::before {
+    content: attr(id);
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 10;
   }
 </style>

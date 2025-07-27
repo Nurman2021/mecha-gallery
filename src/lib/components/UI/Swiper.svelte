@@ -138,6 +138,7 @@
 </script>
 
 <div bind:this={swiperContainer}>
+  <h2 class="text-white font-druk text-2xl mb-8 text-left pl-4">MY PROJECTS</h2>
   <Swiper
     modules={[Navigation, Pagination, A11y]}
     spaceBetween={1}
