@@ -64,28 +64,62 @@
   };
 
   // Handle window resize for responsive camera positioning
+  let previousIsMobile = false;
+  let isInitialized = false;
+  let resizeTimeout: number;
+
   const handleResize = () => {
     if (!sceneLoaded || !$cameraControls) return;
 
-    // Update camera position based on current section and new viewport size
-    const cameraConfig = getCameraConfig(currentSection);
+    // Clear previous timeout to debounce
+    if (resizeTimeout) {
+      clearTimeout(resizeTimeout);
+    }
 
-    setTimeout(() => {
-      // @ts-ignore
-      $cameraControls.setPosition(
-        cameraConfig.position[0],
-        cameraConfig.position[1],
-        cameraConfig.position[2],
-        true
-      );
-      // @ts-ignore
-      $cameraControls.moveTo(
-        cameraConfig.target[0],
-        cameraConfig.target[1],
-        cameraConfig.target[2],
-        true
-      );
-    }, 100);
+    resizeTimeout = setTimeout(() => {
+      const currentIsMobile = window.innerWidth < 768; // md breakpoint
+
+      // Initialize the previous state on first run
+      if (!isInitialized) {
+        previousIsMobile = currentIsMobile;
+        isInitialized = true;
+        return;
+      }
+
+      // Check if we crossed the mobile/desktop breakpoint
+      if (previousIsMobile !== currentIsMobile) {
+        console.log(
+          `Media screen changed: ${previousIsMobile ? "mobile" : "desktop"} -> ${currentIsMobile ? "mobile" : "desktop"}`
+        );
+        console.log("Refreshing page to reset camera positioning...");
+
+        // Add a small delay to ensure the change is intentional
+        setTimeout(() => {
+          window.location.reload();
+        }, 200);
+        return;
+      }
+
+      // Update camera position based on current section and new viewport size
+      const cameraConfig = getCameraConfig(currentSection);
+
+      setTimeout(() => {
+        // @ts-ignore
+        $cameraControls.setPosition(
+          cameraConfig.position[0],
+          cameraConfig.position[1],
+          cameraConfig.position[2],
+          true
+        );
+        // @ts-ignore
+        $cameraControls.moveTo(
+          cameraConfig.target[0],
+          cameraConfig.target[1],
+          cameraConfig.target[2],
+          true
+        );
+      }, 100);
+    }, 300); // Debounce delay of 300ms
   };
 
   onMount(() => {
@@ -94,6 +128,10 @@
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      // Clear any pending timeout
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
     };
   });
 
