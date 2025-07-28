@@ -1,0 +1,19 @@
+#TODO-1
+1. add layout for mobile
+2. update hero class for mobile
+3. update project class for mobile
+4. update skill set class for mobile
+5. update Contact class for mobile
+6. update swiper for mobile
+
+#TODO-2 
+1. create config position and rotation for mobile and desktop
+2. fix config position and rotation
+3. debug error App.svelte
+
+
+#TODO-3 (optional)
+1. create animation color transition
+2. add animation for text
+3. AOS using gsap
+4. optimize file

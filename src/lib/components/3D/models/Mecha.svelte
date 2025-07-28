@@ -18,6 +18,32 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
   const gltf = useGltf("/models/Mecha.glb");
   export const { actions, mixer } = useGltfAnimations(gltf, ref);
 
+  // Log position and rotation periodically
+  let logInterval: number;
+
+  $: if (ref) {
+    if (logInterval) clearInterval(logInterval);
+
+    logInterval = setInterval(() => {
+      console.log("3D Model Position:", {
+        x: ref.position.x.toFixed(3),
+        y: ref.position.y.toFixed(3),
+        z: ref.position.z.toFixed(3),
+      });
+      console.log("3D Model Rotation:", {
+        x: ref.rotation.x.toFixed(3),
+        y: ref.rotation.y.toFixed(3),
+        z: ref.rotation.z.toFixed(3),
+      });
+      console.log("3D Model Scale:", {
+        x: ref.scale.x.toFixed(3),
+        y: ref.scale.y.toFixed(3),
+        z: ref.scale.z.toFixed(3),
+      });
+      console.log("---");
+    }, 2000); // Log every 2 seconds
+  }
+
   // Play current animation when it changes
   $: if ($actions[currentAnimation] && !isTransitioning) {
     $actions[currentAnimation]?.play();
@@ -143,6 +169,11 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
     subIdlePose();
     subChannel();
     subIdleReady();
+
+    // Clear logging interval
+    if (logInterval) {
+      clearInterval(logInterval);
+    }
   });
 </script>
 

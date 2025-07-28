@@ -17,6 +17,7 @@
   import Swiper from "../UI/Swiper.svelte";
   import ProgressBar from "../UI/ProgressBar.svelte";
   import ContactCard from "../UI/ContactCard.svelte";
+  import { getCameraConfig } from "$lib/configs/cameraConfig";
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -61,6 +62,40 @@
       initializeSectionAnimations();
     }, 500);
   };
+
+  // Handle window resize for responsive camera positioning
+  const handleResize = () => {
+    if (!sceneLoaded || !$cameraControls) return;
+
+    // Update camera position based on current section and new viewport size
+    const cameraConfig = getCameraConfig(currentSection);
+
+    setTimeout(() => {
+      // @ts-ignore
+      $cameraControls.setPosition(
+        cameraConfig.position[0],
+        cameraConfig.position[1],
+        cameraConfig.position[2],
+        true
+      );
+      // @ts-ignore
+      $cameraControls.moveTo(
+        cameraConfig.target[0],
+        cameraConfig.target[1],
+        cameraConfig.target[2],
+        true
+      );
+    }, 100);
+  };
+
+  onMount(() => {
+    // Add resize listener
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 
   // Initialize section animations
   const initializeSectionAnimations = () => {
@@ -182,10 +217,22 @@
           animateSection(projectsSection, true);
         }
         isTransitioning = true;
+
+        const cameraConfig = getCameraConfig("projects");
         // @ts-ignore
-        $cameraControls.setPosition(-10, 12, 16, true);
+        $cameraControls.setPosition(
+          cameraConfig.position[0],
+          cameraConfig.position[1],
+          cameraConfig.position[2],
+          true
+        );
         // @ts-ignore
-        $cameraControls.moveTo(4, 0.5, -2, true);
+        $cameraControls.moveTo(
+          cameraConfig.target[0],
+          cameraConfig.target[1],
+          cameraConfig.target[2],
+          true
+        );
 
         setActiveAnimation("run");
 
@@ -205,10 +252,22 @@
         currentSection = "projects";
         animateSection(projectsSection, true);
         isTransitioning = true;
+
+        const cameraConfig = getCameraConfig("projects");
         // @ts-ignore
-        $cameraControls.setPosition(-10, 12, 16, true);
+        $cameraControls.setPosition(
+          cameraConfig.position[0],
+          cameraConfig.position[1],
+          cameraConfig.position[2],
+          true
+        );
         // @ts-ignore
-        $cameraControls.moveTo(4, 0.5, -2, true);
+        $cameraControls.moveTo(
+          cameraConfig.target[0],
+          cameraConfig.target[1],
+          cameraConfig.target[2],
+          true
+        );
 
         setActiveAnimation("run");
 
@@ -252,10 +311,22 @@
           animateSection(aboutSection, true);
         }
         isTransitioning = true;
+
+        const cameraConfig = getCameraConfig("about");
         // @ts-ignore
-        $cameraControls.setPosition(5, 10, 20, true);
+        $cameraControls.setPosition(
+          cameraConfig.position[0],
+          cameraConfig.position[1],
+          cameraConfig.position[2],
+          true
+        );
         // @ts-ignore
-        $cameraControls.moveTo(-4, 2, 0, true);
+        $cameraControls.moveTo(
+          cameraConfig.target[0],
+          cameraConfig.target[1],
+          cameraConfig.target[2],
+          true
+        );
 
         setActiveAnimation("idlePose");
 
@@ -275,10 +346,22 @@
         currentSection = "about";
         animateSection(aboutSection, true);
         isTransitioning = true;
+
+        const cameraConfig = getCameraConfig("about");
         // @ts-ignore
-        $cameraControls.setPosition(5, 10, 20, true);
+        $cameraControls.setPosition(
+          cameraConfig.position[0],
+          cameraConfig.position[1],
+          cameraConfig.position[2],
+          true
+        );
         // @ts-ignore
-        $cameraControls.moveTo(-4, 2, 0, true);
+        $cameraControls.moveTo(
+          cameraConfig.target[0],
+          cameraConfig.target[1],
+          cameraConfig.target[2],
+          true
+        );
 
         setActiveAnimation("idlePose");
 
@@ -288,10 +371,22 @@
       },
       onLeaveBack: () => {
         animateSection(aboutSection, false);
+
+        const cameraConfig = getCameraConfig("projects");
         // @ts-ignore
-        $cameraControls.setPosition(-10, 12, 16, true);
+        $cameraControls.setPosition(
+          cameraConfig.position[0],
+          cameraConfig.position[1],
+          cameraConfig.position[2],
+          true
+        );
         // @ts-ignore
-        $cameraControls.moveTo(4, 0.5, -2, true);
+        $cameraControls.moveTo(
+          cameraConfig.target[0],
+          cameraConfig.target[1],
+          cameraConfig.target[2],
+          true
+        );
 
         setActiveAnimation("run");
       },
@@ -308,8 +403,22 @@
           animateSection(contactSection, true);
         }
         isTransitioning = true;
+
+        const cameraConfig = getCameraConfig("contact");
         // @ts-ignore
-        $cameraControls.moveTo(2, 2, -2, true);
+        $cameraControls.setPosition(
+          cameraConfig.position[0],
+          cameraConfig.position[1],
+          cameraConfig.position[2],
+          true
+        );
+        // @ts-ignore
+        $cameraControls.moveTo(
+          cameraConfig.target[0],
+          cameraConfig.target[1],
+          cameraConfig.target[2],
+          true
+        );
 
         setActiveAnimation("respawn");
 
@@ -329,8 +438,22 @@
         currentSection = "contact";
         animateSection(contactSection, true);
         isTransitioning = true;
+
+        const cameraConfig = getCameraConfig("contact");
         // @ts-ignore
-        $cameraControls.moveTo(2, 2, -2, true);
+        $cameraControls.setPosition(
+          cameraConfig.position[0],
+          cameraConfig.position[1],
+          cameraConfig.position[2],
+          true
+        );
+        // @ts-ignore
+        $cameraControls.moveTo(
+          cameraConfig.target[0],
+          cameraConfig.target[1],
+          cameraConfig.target[2],
+          true
+        );
 
         setActiveAnimation("respawn");
 
@@ -340,10 +463,22 @@
       },
       onLeaveBack: () => {
         animateSection(contactSection, false);
+
+        const cameraConfig = getCameraConfig("about");
         // @ts-ignore
-        $cameraControls.setPosition(5, 10, 20, true);
+        $cameraControls.setPosition(
+          cameraConfig.position[0],
+          cameraConfig.position[1],
+          cameraConfig.position[2],
+          true
+        );
         // @ts-ignore
-        $cameraControls.moveTo(-4, 2, 0, true);
+        $cameraControls.moveTo(
+          cameraConfig.target[0],
+          cameraConfig.target[1],
+          cameraConfig.target[2],
+          true
+        );
 
         setActiveAnimation("idlePose");
       },
@@ -388,19 +523,21 @@
   <section
     bind:this={heroSection}
     id="hero"
-    class="h-screen flex flex-col relative justify-center items-center"
+    class="h-screen flex flex-col md:flex-col relative justify-center items-center"
     class:active={currentSection === "hero"}
   >
-    <div class="flex justify-between w-1/2">
-      <p class="text-white font-druk text-sm animate-in">Let's <br /> Drive</p>
-      <p class="text-white font-druk text-sm animate-in">
+    <div class="flex justify-between w-full md:w-1/2 px-4 md:px-0">
+      <p class="text-white font-druk text-xs md:text-sm animate-in">
+        Let's <br /> Drive
+      </p>
+      <p class="text-white font-druk text-xs md:text-sm animate-in">
         I'm Painting <br /> on
         <span class="text-[#cc4f55]">&lt;canvas/&gt;</span>
       </p>
     </div>
 
     <p
-      class="text-white font-light bottom-0 flex flex-col items-center absolute animate-bounce animate-in"
+      class="text-white font-light bottom-4 md:bottom-0 flex flex-col items-center absolute animate-bounce animate-in"
     >
       Scroll down
       <ChevronDown size={24} />
@@ -410,11 +547,11 @@
   <section
     bind:this={projectsSection}
     id="projects"
-    class="h-screen flex justify-center items-center"
+    class="h-screen flex flex-col md:flex-row justify-center items-center"
     class:active={currentSection === "projects"}
   >
-    <div class="w-3/5 flex animate-in"></div>
-    <div class="w-2/5 animate-in">
+    <div class="w-full md:w-3/5 flex animate-in order-2 md:order-1"></div>
+    <div class="w-full md:w-2/5 animate-in order-1 md:order-2 p-4 md:p-0">
       <Swiper />
     </div>
   </section>
@@ -422,23 +559,23 @@
   <section
     bind:this={aboutSection}
     id="about"
-    class="h-screen flex justify-center items-center"
+    class="h-screen flex flex-col md:flex-row justify-center items-center"
     class:active={currentSection === "about"}
   >
-    <div class="w-1/2 animate-in flex justify-center">
+    <div class="w-full md:w-1/2 animate-in flex justify-center p-4 md:p-0">
       <ProgressBar />
     </div>
-    <div class="w-1/2 animate-in"></div>
+    <div class="w-full md:w-1/2 animate-in"></div>
   </section>
 
   <section
     bind:this={contactSection}
     id="contact"
-    class="h-screen flex justify-center items-center"
+    class="h-screen flex flex-col md:flex-row justify-center items-center"
     class:active={currentSection === "contact"}
   >
-    <div class="w-2/5 flex animate-in"></div>
-    <div class="animate-in">
+    <div class="w-full md:w-2/5 flex animate-in order-2 md:order-1"></div>
+    <div class="animate-in order-1 md:order-2 p-4 md:p-0">
       <ContactCard />
     </div>
   </section>

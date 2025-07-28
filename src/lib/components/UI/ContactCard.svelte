@@ -42,10 +42,12 @@
 </script>
 
 <div class="text-center">
-  <h2 class="text-white font-druk text-2xl mb-8">GET IN TOUCH</h2>
+  <h2 class="text-white font-druk text-2xl mb-8 invisible md:visible">
+    GET IN TOUCH
+  </h2>
 
   <div
-    class="bg-black rounded-2xl p-4 border-[#68151D] border-2 mb-4 flex gap-4"
+    class="bg-black rounded-2xl p-4 border-[#68151D] border-2 mb-4 flex gap-4 invisible md:visible"
   >
     <div class="text-left my-8">
       <h1 class="text-white font-bold text-4xl">Hi, I'm Nurman 👋</h1>

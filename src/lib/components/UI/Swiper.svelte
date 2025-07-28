@@ -142,13 +142,22 @@
   <Swiper
     modules={[Navigation, Pagination, A11y]}
     spaceBetween={1}
-    slidesPerView={2}
+    slidesPerView={1}
+    slidesPerViewMobile={1}
+    slidesPerViewTablet={2}
+    centeredSlides={true}
     navigation
     pagination={{ clickable: true }}
     allowTouchMove={true}
     speed={600}
     longSwipesRatio={0.1}
     threshold={10}
+    breakpoints={{
+      768: {
+        slidesPerView: 2,
+        centeredSlides: false,
+      },
+    }}
     on:swiper={(e) => {
       swiperInstance = e.detail[0];
     }}
@@ -291,5 +300,18 @@
     width: 20rem;
     height: 23rem;
     opacity: 0.3;
+  }
+
+  /* Mobile centered slide styling */
+  @media (max-width: 767px) {
+    :global(.swiper-slide) {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+    }
+
+    :global(.swiper-wrapper) {
+      align-items: center !important;
+    }
   }
 </style>
