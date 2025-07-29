@@ -211,15 +211,42 @@
         }
         isTransitioning = true;
 
+        // Sync BehindBackground immediately
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "hero" },
+            })
+          );
+        }
+
         if ($cameraControls) {
           ($cameraControls as any).reset(true);
         }
         setActiveAnimation("idle");
 
-        console.log(
-          "Entered hero section, active animation:",
-          $idle ? "idle" : "other"
-        );
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      },
+      onEnterBack: () => {
+        currentSection = "hero";
+        animateSection(heroSection, true);
+        isTransitioning = true;
+
+        // Sync BehindBackground immediately
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "hero" },
+            })
+          );
+        }
+
+        if ($cameraControls) {
+          ($cameraControls as any).reset(true);
+        }
+        setActiveAnimation("idle");
 
         setTimeout(() => {
           isTransitioning = false;
@@ -227,20 +254,6 @@
       },
       onLeave: () => {
         animateSection(heroSection, false);
-      },
-      onEnterBack: () => {
-        currentSection = "hero";
-        animateSection(heroSection, true);
-        isTransitioning = true;
-
-        if ($cameraControls) {
-          ($cameraControls as any).reset(true);
-        }
-        setActiveAnimation("idle");
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
       },
       onLeaveBack: () => {
         animateSection(heroSection, false);
@@ -259,8 +272,16 @@
         }
         isTransitioning = true;
 
-        const cameraConfig = getCameraConfig("projects");
+        // Sync BehindBackground immediately
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "projects" },
+            })
+          );
+        }
 
+        const cameraConfig = getCameraConfig("projects");
         if ($cameraControls) {
           ($cameraControls as any).setPosition(
             cameraConfig.position[0],
@@ -268,7 +289,6 @@
             cameraConfig.position[2],
             true
           );
-
           ($cameraControls as any).moveTo(
             cameraConfig.target[0],
             cameraConfig.target[1],
@@ -279,10 +299,41 @@
 
         setActiveAnimation("run");
 
-        console.log(
-          "Entered projects section, active animation:",
-          $run ? "run" : "other"
-        );
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      },
+      onEnterBack: () => {
+        currentSection = "projects";
+        animateSection(projectsSection, true);
+        isTransitioning = true;
+
+        // Sync BehindBackground immediately
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "projects" },
+            })
+          );
+        }
+
+        const cameraConfig = getCameraConfig("projects");
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
+
+        setActiveAnimation("run");
 
         setTimeout(() => {
           isTransitioning = false;
@@ -291,37 +342,17 @@
       onLeave: () => {
         animateSection(projectsSection, false);
       },
-      onEnterBack: () => {
-        currentSection = "projects";
-        animateSection(projectsSection, true);
-        isTransitioning = true;
-
-        const cameraConfig = getCameraConfig("projects");
-
-        if ($cameraControls) {
-          ($cameraControls as any).setPosition(
-            cameraConfig.position[0],
-            cameraConfig.position[1],
-            cameraConfig.position[2],
-            true
-          );
-
-          ($cameraControls as any).moveTo(
-            cameraConfig.target[0],
-            cameraConfig.target[1],
-            cameraConfig.target[2],
-            true
-          );
-        }
-
-        setActiveAnimation("run");
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
-      },
       onLeaveBack: () => {
         animateSection(projectsSection, false);
+
+        // Reset to hero when leaving projects going back
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "hero" },
+            })
+          );
+        }
 
         if ($cameraControls) {
           ($cameraControls as any).reset(true);
@@ -331,11 +362,8 @@
       scrub: false,
       onUpdate: (self) => {
         scrollProgress = self.progress;
-
-        // Only dispatch at specific intervals
         const discreteProgress = Math.floor(self.progress * 10) / 10;
 
-        // Dispatch event untuk swiper dengan less frequent updates
         window.dispatchEvent(
           new CustomEvent("swiperScroll", {
             detail: {
@@ -347,10 +375,10 @@
       },
     });
 
-    // About section
+    // About section - FIX TRIGGER!
     ScrollTrigger.create({
       trigger: "#about",
-      start: "center bottom",
+      start: "top center", // ← CHANGED from "center bottom"
       end: "bottom center",
       onEnter: () => {
         if (currentSection !== "about") {
@@ -359,8 +387,16 @@
         }
         isTransitioning = true;
 
-        const cameraConfig = getCameraConfig("about");
+        // Sync BehindBackground immediately
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "about" },
+            })
+          );
+        }
 
+        const cameraConfig = getCameraConfig("about");
         if ($cameraControls) {
           ($cameraControls as any).setPosition(
             cameraConfig.position[0],
@@ -368,7 +404,6 @@
             cameraConfig.position[2],
             true
           );
-
           ($cameraControls as any).moveTo(
             cameraConfig.target[0],
             cameraConfig.target[1],
@@ -379,10 +414,41 @@
 
         setActiveAnimation("idlePose");
 
-        console.log(
-          "Entered about section, active animation:",
-          $idlePose ? "idlePose" : "other"
-        );
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      },
+      onEnterBack: () => {
+        currentSection = "about";
+        animateSection(aboutSection, true);
+        isTransitioning = true;
+
+        // Sync BehindBackground immediately
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "about" },
+            })
+          );
+        }
+
+        const cameraConfig = getCameraConfig("about");
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
+
+        setActiveAnimation("idlePose");
 
         setTimeout(() => {
           isTransitioning = false;
@@ -391,40 +457,19 @@
       onLeave: () => {
         animateSection(aboutSection, false);
       },
-      onEnterBack: () => {
-        currentSection = "about";
-        animateSection(aboutSection, true);
-        isTransitioning = true;
-
-        const cameraConfig = getCameraConfig("about");
-
-        if ($cameraControls) {
-          ($cameraControls as any).setPosition(
-            cameraConfig.position[0],
-            cameraConfig.position[1],
-            cameraConfig.position[2],
-            true
-          );
-
-          ($cameraControls as any).moveTo(
-            cameraConfig.target[0],
-            cameraConfig.target[1],
-            cameraConfig.target[2],
-            true
-          );
-        }
-
-        setActiveAnimation("idlePose");
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
-      },
       onLeaveBack: () => {
         animateSection(aboutSection, false);
 
-        const cameraConfig = getCameraConfig("projects");
+        // Go back to projects
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "projects" },
+            })
+          );
+        }
 
+        const cameraConfig = getCameraConfig("projects");
         if ($cameraControls) {
           ($cameraControls as any).setPosition(
             cameraConfig.position[0],
@@ -432,7 +477,6 @@
             cameraConfig.position[2],
             true
           );
-
           ($cameraControls as any).moveTo(
             cameraConfig.target[0],
             cameraConfig.target[1],
@@ -457,8 +501,16 @@
         }
         isTransitioning = true;
 
-        const cameraConfig = getCameraConfig("contact");
+        // Sync BehindBackground immediately
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "contact" },
+            })
+          );
+        }
 
+        const cameraConfig = getCameraConfig("contact");
         if ($cameraControls) {
           ($cameraControls as any).setPosition(
             cameraConfig.position[0],
@@ -466,7 +518,6 @@
             cameraConfig.position[2],
             true
           );
-
           ($cameraControls as any).moveTo(
             cameraConfig.target[0],
             cameraConfig.target[1],
@@ -477,10 +528,41 @@
 
         setActiveAnimation("respawn");
 
-        console.log(
-          "Entered contact section, active animation:",
-          $respawn ? "respawn" : "other"
-        );
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 1000);
+      },
+      onEnterBack: () => {
+        currentSection = "contact";
+        animateSection(contactSection, true);
+        isTransitioning = true;
+
+        // Sync BehindBackground immediately
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "contact" },
+            })
+          );
+        }
+
+        const cameraConfig = getCameraConfig("contact");
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
+
+        setActiveAnimation("respawn");
 
         setTimeout(() => {
           isTransitioning = false;
@@ -489,40 +571,19 @@
       onLeave: () => {
         animateSection(contactSection, false);
       },
-      onEnterBack: () => {
-        currentSection = "contact";
-        animateSection(contactSection, true);
-        isTransitioning = true;
-
-        const cameraConfig = getCameraConfig("contact");
-
-        if ($cameraControls) {
-          ($cameraControls as any).setPosition(
-            cameraConfig.position[0],
-            cameraConfig.position[1],
-            cameraConfig.position[2],
-            true
-          );
-
-          ($cameraControls as any).moveTo(
-            cameraConfig.target[0],
-            cameraConfig.target[1],
-            cameraConfig.target[2],
-            true
-          );
-        }
-
-        setActiveAnimation("respawn");
-
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 1000);
-      },
       onLeaveBack: () => {
         animateSection(contactSection, false);
 
-        const cameraConfig = getCameraConfig("about");
+        // Go back to about
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("sectionChange", {
+              detail: { section: "about" },
+            })
+          );
+        }
 
+        const cameraConfig = getCameraConfig("about");
         if ($cameraControls) {
           ($cameraControls as any).setPosition(
             cameraConfig.position[0],
@@ -530,7 +591,6 @@
             cameraConfig.position[2],
             true
           );
-
           ($cameraControls as any).moveTo(
             cameraConfig.target[0],
             cameraConfig.target[1],

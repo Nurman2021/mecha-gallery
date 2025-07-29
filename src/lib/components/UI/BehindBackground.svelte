@@ -5,31 +5,38 @@
   import { writable } from "svelte/store";
 
   gsap.registerPlugin(ScrollTrigger);
-  const activeSection = writable<string>("");
+  const activeSection = writable<string>("hero"); // Start with hero
 
-  interface Section {
-    id: string;
-    element: string;
-  }
-
-  const sections: Section[] = [
-    { id: "#hero", element: "hero" },
-    { id: "#projects", element: "projects" },
-    { id: "#about", element: "about" },
-    { id: "#contact", element: "contact" },
-  ];
-
+  // Listen to section changes from App.svelte
   onMount(() => {
-    sections.forEach((section) => {
-      const { id, element } = section;
+    const handleSectionChange = (event: CustomEvent) => {
+      const newSection = event.detail.section;
+      console.log("BehindBackground syncing to:", newSection);
 
-      ScrollTrigger.create({
-        trigger: id,
-        start: "top center",
-        onEnter: () => activeSection.set(element),
-        onEnterBack: () => activeSection.set(element),
-      });
-    });
+      // Map section names for consistency
+      const sectionMap: Record<string, string> = {
+        hero: "hero",
+        projects: "projects",
+        about: "about",
+        contact: "contact",
+      };
+
+      const mappedSection = sectionMap[newSection] || newSection;
+      activeSection.set(mappedSection);
+    };
+
+    // Listen to custom section change events
+    window.addEventListener(
+      "sectionChange",
+      handleSectionChange as EventListener
+    );
+
+    return () => {
+      window.removeEventListener(
+        "sectionChange",
+        handleSectionChange as EventListener
+      );
+    };
   });
 </script>
 
