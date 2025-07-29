@@ -21,25 +21,23 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    loadProgress: any;
+    loadComplete: void;
+  }>();
 
-  // Camera store reactive variable
-  /**
-   * @type {{ zoom: number; }}
-   */
-  // @ts-ignore
-  let camera;
-  // @ts-ignore
+  // Camera store reactive variable with proper typing
+  let camera: THREE.Camera | undefined;
+
   $: if ($cameraControls) {
-    // @ts-ignore
-    camera = $cameraControls._camera;
+    camera = ($cameraControls as any)._camera;
   }
 
   // State variables untuk tracking
-  let currentSection = "hero";
-  let isTransitioning = false;
-  let scrollProgress = 0;
-  let sceneLoaded = false;
+  let currentSection: string = "hero";
+  let isTransitioning: boolean = false;
+  let scrollProgress: number = 0;
+  let sceneLoaded: boolean = false;
 
   // Section elements for GSAP transitions
   let heroSection: HTMLElement;
@@ -48,7 +46,7 @@
   let contactSection: HTMLElement;
 
   // Handle loading events from Scene
-  const handleLoadProgress = (event: any) => {
+  const handleLoadProgress = (event: CustomEvent<any>) => {
     dispatch("loadProgress", event.detail);
   };
 
@@ -64,11 +62,11 @@
   };
 
   // Handle window resize for responsive camera positioning
-  let previousIsMobile = false;
-  let isInitialized = false;
+  let previousIsMobile: boolean = false;
+  let isInitialized: boolean = false;
   let resizeTimeout: number;
 
-  const handleResize = () => {
+  const handleResize = (): void => {
     if (!sceneLoaded || !$cameraControls) return;
 
     // Clear previous timeout to debounce
@@ -77,7 +75,7 @@
     }
 
     resizeTimeout = setTimeout(() => {
-      const currentIsMobile = window.innerWidth < 768; // md breakpoint
+      const currentIsMobile: boolean = window.innerWidth < 768; // md breakpoint
 
       // Initialize the previous state on first run
       if (!isInitialized) {
@@ -104,20 +102,21 @@
       const cameraConfig = getCameraConfig(currentSection);
 
       setTimeout(() => {
-        // @ts-ignore
-        $cameraControls.setPosition(
-          cameraConfig.position[0],
-          cameraConfig.position[1],
-          cameraConfig.position[2],
-          true
-        );
-        // @ts-ignore
-        $cameraControls.moveTo(
-          cameraConfig.target[0],
-          cameraConfig.target[1],
-          cameraConfig.target[2],
-          true
-        );
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
       }, 100);
     }, 300); // Debounce delay of 300ms
   };
@@ -136,7 +135,7 @@
   });
 
   // Initialize section animations
-  const initializeSectionAnimations = () => {
+  const initializeSectionAnimations = (): void => {
     // Set initial states - hide all sections except hero
     gsap.set([projectsSection, aboutSection, contactSection], {
       opacity: 0,
@@ -165,7 +164,7 @@
   };
 
   // Enhanced section transition
-  const animateSection = (section: HTMLElement, show: boolean = true) => {
+  const animateSection = (section: HTMLElement, show: boolean = true): void => {
     if (show) {
       gsap.to(section, {
         opacity: 1,
@@ -199,7 +198,7 @@
   };
 
   // GSAP ScrollTrigger setup
-  const setupScrollTriggers = () => {
+  const setupScrollTriggers = (): void => {
     // Hero section
     ScrollTrigger.create({
       trigger: "#hero",
@@ -211,8 +210,10 @@
           animateSection(heroSection, true);
         }
         isTransitioning = true;
-        // @ts-ignore
-        $cameraControls.reset(true);
+
+        if ($cameraControls) {
+          ($cameraControls as any).reset(true);
+        }
         setActiveAnimation("idle");
 
         console.log(
@@ -231,8 +232,10 @@
         currentSection = "hero";
         animateSection(heroSection, true);
         isTransitioning = true;
-        // @ts-ignore
-        $cameraControls.reset(true);
+
+        if ($cameraControls) {
+          ($cameraControls as any).reset(true);
+        }
         setActiveAnimation("idle");
 
         setTimeout(() => {
@@ -257,20 +260,22 @@
         isTransitioning = true;
 
         const cameraConfig = getCameraConfig("projects");
-        // @ts-ignore
-        $cameraControls.setPosition(
-          cameraConfig.position[0],
-          cameraConfig.position[1],
-          cameraConfig.position[2],
-          true
-        );
-        // @ts-ignore
-        $cameraControls.moveTo(
-          cameraConfig.target[0],
-          cameraConfig.target[1],
-          cameraConfig.target[2],
-          true
-        );
+
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
 
         setActiveAnimation("run");
 
@@ -292,20 +297,22 @@
         isTransitioning = true;
 
         const cameraConfig = getCameraConfig("projects");
-        // @ts-ignore
-        $cameraControls.setPosition(
-          cameraConfig.position[0],
-          cameraConfig.position[1],
-          cameraConfig.position[2],
-          true
-        );
-        // @ts-ignore
-        $cameraControls.moveTo(
-          cameraConfig.target[0],
-          cameraConfig.target[1],
-          cameraConfig.target[2],
-          true
-        );
+
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
 
         setActiveAnimation("run");
 
@@ -315,8 +322,10 @@
       },
       onLeaveBack: () => {
         animateSection(projectsSection, false);
-        // @ts-ignore
-        $cameraControls.reset(true);
+
+        if ($cameraControls) {
+          ($cameraControls as any).reset(true);
+        }
         setActiveAnimation("idle");
       },
       scrub: false,
@@ -351,20 +360,22 @@
         isTransitioning = true;
 
         const cameraConfig = getCameraConfig("about");
-        // @ts-ignore
-        $cameraControls.setPosition(
-          cameraConfig.position[0],
-          cameraConfig.position[1],
-          cameraConfig.position[2],
-          true
-        );
-        // @ts-ignore
-        $cameraControls.moveTo(
-          cameraConfig.target[0],
-          cameraConfig.target[1],
-          cameraConfig.target[2],
-          true
-        );
+
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
 
         setActiveAnimation("idlePose");
 
@@ -386,20 +397,22 @@
         isTransitioning = true;
 
         const cameraConfig = getCameraConfig("about");
-        // @ts-ignore
-        $cameraControls.setPosition(
-          cameraConfig.position[0],
-          cameraConfig.position[1],
-          cameraConfig.position[2],
-          true
-        );
-        // @ts-ignore
-        $cameraControls.moveTo(
-          cameraConfig.target[0],
-          cameraConfig.target[1],
-          cameraConfig.target[2],
-          true
-        );
+
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
 
         setActiveAnimation("idlePose");
 
@@ -411,20 +424,22 @@
         animateSection(aboutSection, false);
 
         const cameraConfig = getCameraConfig("projects");
-        // @ts-ignore
-        $cameraControls.setPosition(
-          cameraConfig.position[0],
-          cameraConfig.position[1],
-          cameraConfig.position[2],
-          true
-        );
-        // @ts-ignore
-        $cameraControls.moveTo(
-          cameraConfig.target[0],
-          cameraConfig.target[1],
-          cameraConfig.target[2],
-          true
-        );
+
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
 
         setActiveAnimation("run");
       },
@@ -443,20 +458,22 @@
         isTransitioning = true;
 
         const cameraConfig = getCameraConfig("contact");
-        // @ts-ignore
-        $cameraControls.setPosition(
-          cameraConfig.position[0],
-          cameraConfig.position[1],
-          cameraConfig.position[2],
-          true
-        );
-        // @ts-ignore
-        $cameraControls.moveTo(
-          cameraConfig.target[0],
-          cameraConfig.target[1],
-          cameraConfig.target[2],
-          true
-        );
+
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
 
         setActiveAnimation("respawn");
 
@@ -478,20 +495,22 @@
         isTransitioning = true;
 
         const cameraConfig = getCameraConfig("contact");
-        // @ts-ignore
-        $cameraControls.setPosition(
-          cameraConfig.position[0],
-          cameraConfig.position[1],
-          cameraConfig.position[2],
-          true
-        );
-        // @ts-ignore
-        $cameraControls.moveTo(
-          cameraConfig.target[0],
-          cameraConfig.target[1],
-          cameraConfig.target[2],
-          true
-        );
+
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
 
         setActiveAnimation("respawn");
 
@@ -503,28 +522,27 @@
         animateSection(contactSection, false);
 
         const cameraConfig = getCameraConfig("about");
-        // @ts-ignore
-        $cameraControls.setPosition(
-          cameraConfig.position[0],
-          cameraConfig.position[1],
-          cameraConfig.position[2],
-          true
-        );
-        // @ts-ignore
-        $cameraControls.moveTo(
-          cameraConfig.target[0],
-          cameraConfig.target[1],
-          cameraConfig.target[2],
-          true
-        );
+
+        if ($cameraControls) {
+          ($cameraControls as any).setPosition(
+            cameraConfig.position[0],
+            cameraConfig.position[1],
+            cameraConfig.position[2],
+            true
+          );
+
+          ($cameraControls as any).moveTo(
+            cameraConfig.target[0],
+            cameraConfig.target[1],
+            cameraConfig.target[2],
+            true
+          );
+        }
 
         setActiveAnimation("idlePose");
       },
     });
   };
-
-  // Remove onMount that immediately calls setupScrollTriggers
-  // It will be called after scene is loaded
 
   // Reactive statements untuk debug dan tracking
   $: {
