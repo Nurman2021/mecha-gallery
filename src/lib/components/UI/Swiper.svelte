@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // @ts-nocheck
 
   import { onMount } from "svelte";
@@ -16,7 +16,7 @@
   let swiperContainer;
   let isScrolling = false;
   let currentIndex = 0;
-  const totalSlides = 4;
+  const totalSlides = 5;
   let scrollTimeout;
   let lastScrollTime = 0;
 
@@ -137,16 +137,15 @@
   });
 </script>
 
-<div bind:this={swiperContainer}>
-  <h2 class="text-white font-druk text-2xl mb-8 text-left pl-4">MY PROJECTS</h2>
+<div bind:this={swiperContainer} class="w-full">
+  <!-- <h2 class="text-white font-druk text-2xl mb-8 text-center">MY PROJECTS</h2> -->
   <Swiper
     modules={[Navigation, Pagination, A11y]}
     spaceBetween={1}
     slidesPerView={1}
     slidesPerViewMobile={1}
-    slidesPerViewTablet={2}
+    slidesPerViewTablet={3}
     centeredSlides={true}
-    navigation
     pagination={{ clickable: true }}
     allowTouchMove={true}
     speed={600}
@@ -154,8 +153,8 @@
     threshold={10}
     breakpoints={{
       768: {
-        slidesPerView: 2,
-        centeredSlides: false,
+        slidesPerView: 3,
+        centeredSlides: true,
       },
     }}
     on:swiper={(e) => {
@@ -170,7 +169,9 @@
     }}
   >
     <SwiperSlide>
-      <div class="p-4 text-left text-white">
+      <div
+        class="p-4 text-left text-white bg-black rounded-2xl border-2 border-[#68151D]"
+      >
         <div class="flex gap-3 mb-4">
           <i class="devicon-css3-plain"></i>
           <i class="devicon-threejs-original"></i>
@@ -196,17 +197,16 @@
       </div>
     </SwiperSlide>
     <SwiperSlide>
-      <div class="p-4 text-left text-white">
+      <div
+        class="p-4 text-left text-white bg-black rounded-2xl border-2 border-[#68151D]"
+      >
         <div class="flex gap-3 mb-4">
           <i class="devicon-supabase-plain"></i>
           <i class="devicon-tailwindcss-original"></i>
           <i class="devicon-svelte-plain"></i>
           <i class="devicon-vercel-original"></i>
         </div>
-        <p class="text-xs">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam,
-          deleniti? Sunt fugit doloribus eius repudiandae
-        </p>
+
         <img src="/images/porto/derma.png" alt="project" />
         <h1 class="font-druk text-sm">Dermasense</h1>
         <a
@@ -225,7 +225,9 @@
       </div>
     </SwiperSlide>
     <SwiperSlide>
-      <div class="p-4 text-left text-white">
+      <div
+        class="p-4 text-left text-white bg-black rounded-2xl border-2 border-[#68151D]"
+      >
         <div class="flex gap-3 mb-4">
           <i class="devicon-tailwindcss-original"></i>
           <i class="devicon-svelte-plain"></i>
@@ -250,7 +252,9 @@
       </div>
     </SwiperSlide>
     <SwiperSlide>
-      <div class="p-4 text-white text-left">
+      <div
+        class="p-4 text-white text-left bg-black rounded-2xl border-2 border-[#68151D]"
+      >
         <div class="flex gap-3 mb-4">
           <i class="devicon-tailwindcss-original"></i>
           <i class="devicon-antdesign-plain"></i>
@@ -276,23 +280,6 @@
     </SwiperSlide>
   </Swiper>
 </div>
-<svg xmlns="http://www.w3.org/2000/svg"
-  ><filter id="svgGradientMap"
-    ><fecolormatrix type="saturate" values="0" /><feComponentTransfer
-      color-interpolation-filters="sRGB"
-      ><feFuncR
-        type="table"
-        tableValues="0.16,0.17,0.18,0.18,0.19,0.2,0.2,0.21,0.22,0.22,0.23,0.23,0.24,0.25,0.25,0.26,0.27,0.27,0.28,0.29,0.29,0.3,0.3,0.31,0.32,0.32,0.33,0.34,0.34,0.35,0.36,0.36,0.37,0.37,0.38,0.39,0.39,0.4,0.41,0.41,0.42,0.43,0.43,0.44,0.44,0.45,0.46,0.46,0.47,0.48,0.48,0.49,0.5,0.5,0.51,0.51,0.52,0.53,0.53,0.54,0.55,0.55,0.56,0.56,0.57,0.58,0.58,0.59,0.6,0.6,0.61,0.62,0.62,0.63,0.63,0.64,0.65,0.65,0.66,0.67,0.67,0.68,0.69,0.69,0.7,0.7,0.71,0.72,0.72,0.73,0.74,0.74,0.75,0.76,0.76,0.77,0.77,0.78,0.79,0.79,204"
-      /><feFuncG
-        type="table"
-        tableValues="0.04,0.04,0.04,0.05,0.05,0.05,0.06,0.06,0.06,0.06,0.07,0.07,0.07,0.07,0.08,0.08,0.08,0.09,0.09,0.09,0.09,0.1,0.1,0.1,0.1,0.11,0.11,0.11,0.11,0.12,0.12,0.12,0.13,0.13,0.13,0.13,0.14,0.14,0.14,0.14,0.15,0.15,0.15,0.16,0.16,0.16,0.16,0.17,0.17,0.17,0.17,0.18,0.18,0.18,0.19,0.19,0.19,0.19,0.2,0.2,0.2,0.2,0.21,0.21,0.21,0.22,0.22,0.22,0.22,0.23,0.23,0.23,0.23,0.24,0.24,0.24,0.24,0.25,0.25,0.25,0.26,0.26,0.26,0.26,0.27,0.27,0.27,0.27,0.28,0.28,0.28,0.29,0.29,0.29,0.29,0.3,0.3,0.3,0.3,0.31,79"
-      /><feFuncB
-        type="table"
-        tableValues="0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.34,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,85"
-      /></feComponentTransfer
-    ></filter
-  ></svg
->
 
 <style>
   img {

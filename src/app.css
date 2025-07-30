@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 
+
+/* *{
+    border: solid 1px yellow;
+} */
+
+
 html {
     scroll-behavior: smooth;
   }
@@ -47,10 +53,13 @@ body{
 
 .swiper-slide{
     opacity: 0.5;
+    transform: scale(0.9);
 }
 
 .swiper-slide.swiper-slide-active{
     opacity: 1;
+        transform: scale(1);
+
 }
 
 .text-outline{
@@ -84,6 +93,8 @@ body{
     border-radius: 1rem;
     transform: scale(0.9);
 }
+
+
 
 /* .swiper-slide{
     max-width: 200px;

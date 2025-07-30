@@ -15,7 +15,10 @@
     setActiveAnimation,
   } from "$lib/components/3D/animationState";
   import Swiper from "../UI/Swiper.svelte";
+  import WhatIDo from "../UI/WhatIDo.svelte";
+  import MyWork from "../UI/MyWork.svelte";
   import ProgressBar from "../UI/ProgressBar.svelte";
+  import MyExperience from "../UI/MyExperience.svelte";
   import ContactCard from "../UI/ContactCard.svelte";
   import { getCameraConfig } from "$lib/configs/cameraConfig";
 
@@ -199,12 +202,18 @@
 
   // GSAP ScrollTrigger setup
   const setupScrollTriggers = (): void => {
+    // Clear any existing ScrollTriggers first
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+
+    console.log("Setting up ScrollTriggers with spacers...");
+
     // Hero section
     ScrollTrigger.create({
       trigger: "#hero",
-      start: "top center",
-      end: "bottom center",
+      start: "top 20%", // Hero tetap 20% karena tidak ada spacer sebelumnya
+      end: "bottom 80%",
       onEnter: () => {
+        console.log("ScrollTrigger: Entering HERO section");
         if (currentSection !== "hero") {
           currentSection = "hero";
           animateSection(heroSection, true);
@@ -230,6 +239,7 @@
         }, 1000);
       },
       onEnterBack: () => {
+        console.log("ScrollTrigger: Entering back HERO section");
         currentSection = "hero";
         animateSection(heroSection, true);
         isTransitioning = true;
@@ -253,9 +263,11 @@
         }, 1000);
       },
       onLeave: () => {
+        console.log("ScrollTrigger: Leaving HERO section");
         animateSection(heroSection, false);
       },
       onLeaveBack: () => {
+        console.log("ScrollTrigger: Leaving back HERO section");
         animateSection(heroSection, false);
       },
     });
@@ -263,9 +275,10 @@
     // Projects section
     ScrollTrigger.create({
       trigger: "#projects",
-      start: "top center",
-      end: "bottom center",
+      start: "top 30%", // Lebih lambat masuk karena ada spacer
+      end: "bottom 70%", // Lebih cepat keluar untuk smooth transition
       onEnter: () => {
+        console.log("ScrollTrigger: Entering PROJECTS section");
         if (currentSection !== "projects") {
           currentSection = "projects";
           animateSection(projectsSection, true);
@@ -304,6 +317,7 @@
         }, 1000);
       },
       onEnterBack: () => {
+        console.log("ScrollTrigger: Entering back PROJECTS section");
         currentSection = "projects";
         animateSection(projectsSection, true);
         isTransitioning = true;
@@ -340,9 +354,11 @@
         }, 1000);
       },
       onLeave: () => {
+        console.log("ScrollTrigger: Leaving PROJECTS section");
         animateSection(projectsSection, false);
       },
       onLeaveBack: () => {
+        console.log("ScrollTrigger: Leaving back PROJECTS section");
         animateSection(projectsSection, false);
 
         // Reset to hero when leaving projects going back
@@ -378,9 +394,10 @@
     // About section - FIX TRIGGER!
     ScrollTrigger.create({
       trigger: "#about",
-      start: "top center", // ← CHANGED from "center bottom"
-      end: "bottom center",
+      start: "top 30%", // Lebih lambat masuk karena ada spacer
+      end: "bottom 70%", // Lebih cepat keluar untuk smooth transition
       onEnter: () => {
+        console.log("ScrollTrigger: Entering ABOUT section");
         if (currentSection !== "about") {
           currentSection = "about";
           animateSection(aboutSection, true);
@@ -419,6 +436,7 @@
         }, 1000);
       },
       onEnterBack: () => {
+        console.log("ScrollTrigger: Entering back ABOUT section");
         currentSection = "about";
         animateSection(aboutSection, true);
         isTransitioning = true;
@@ -455,9 +473,11 @@
         }, 1000);
       },
       onLeave: () => {
+        console.log("ScrollTrigger: Leaving ABOUT section");
         animateSection(aboutSection, false);
       },
       onLeaveBack: () => {
+        console.log("ScrollTrigger: Leaving back ABOUT section");
         animateSection(aboutSection, false);
 
         // Go back to projects
@@ -492,9 +512,10 @@
     // Contact section
     ScrollTrigger.create({
       trigger: "#contact",
-      start: "top center",
-      end: "bottom center",
+      start: "top 30%", // Lebih lambat masuk karena ada spacer
+      end: "bottom 70%", // Lebih cepat keluar untuk smooth transition
       onEnter: () => {
+        console.log("ScrollTrigger: Entering CONTACT section");
         if (currentSection !== "contact") {
           currentSection = "contact";
           animateSection(contactSection, true);
@@ -533,6 +554,7 @@
         }, 1000);
       },
       onEnterBack: () => {
+        console.log("ScrollTrigger: Entering back CONTACT section");
         currentSection = "contact";
         animateSection(contactSection, true);
         isTransitioning = true;
@@ -569,9 +591,11 @@
         }, 1000);
       },
       onLeave: () => {
+        console.log("ScrollTrigger: Leaving CONTACT section");
         animateSection(contactSection, false);
       },
       onLeaveBack: () => {
+        console.log("ScrollTrigger: Leaving back CONTACT section");
         animateSection(contactSection, false);
 
         // Go back to about
@@ -602,6 +626,9 @@
         setActiveAnimation("idlePose");
       },
     });
+
+    // Refresh ScrollTrigger setelah setup
+    ScrollTrigger.refresh();
   };
 
   // Reactive statements untuk debug dan tracking
@@ -660,29 +687,42 @@
     </p>
   </section>
 
+  <!-- Spacer between hero and projects -->
+  <div class="h-32 md:h-48"></div>
+
   <section
     bind:this={projectsSection}
     id="projects"
-    class="h-screen flex flex-col md:flex-row justify-center items-center"
+    class="flex flex-col justify-center items-center relative min-h-screen py-8"
     class:active={currentSection === "projects"}
   >
-    <div class="w-full md:w-3/5 flex animate-in order-2 md:order-1"></div>
-    <div class="w-full md:w-2/5 animate-in order-1 md:order-2 p-4 md:p-0">
-      <Swiper />
+    <div class="w-full animate-in mb-12">
+      <WhatIDo />
+    </div>
+    <div class="w-full animate-in">
+      <MyWork />
     </div>
   </section>
+
+  <!-- Spacer between projects and about -->
+  <div class="h-32 md:h-48"></div>
 
   <section
     bind:this={aboutSection}
     id="about"
-    class="h-screen flex flex-col md:flex-row justify-center items-center"
+    class="flex flex-col md:flex-row justify-center items-center relative min-h-screen py-8"
     class:active={currentSection === "about"}
   >
     <div class="w-full md:w-1/2 animate-in flex justify-center p-4 md:p-0">
       <ProgressBar />
     </div>
-    <div class="w-full md:w-1/2 animate-in"></div>
+    <div class="w-full md:w-1/2 animate-in">
+      <MyExperience />
+    </div>
   </section>
+
+  <!-- Spacer between about and contact -->
+  <div class="h-32 md:h-48"></div>
 
   <section
     bind:this={contactSection}
@@ -703,12 +743,26 @@
   }
 
   section {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     transition: opacity 0.3s ease;
+  }
+
+  /* Projects section can be taller */
+  section#projects {
+    height: auto;
+    min-height: 100vh;
+    padding: 4rem 0;
+  }
+
+  /* About section can also be taller for timeline */
+  section#about {
+    height: auto;
+    min-height: 100vh;
+    padding: 4rem 0;
   }
 
   section.active {
