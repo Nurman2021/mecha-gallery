@@ -24,10 +24,10 @@
       const emailjs = await import("@emailjs/browser");
 
       await emailjs.sendForm(
-        "YOUR_SERVICE_ID", // Replace with your EmailJS service ID
-        "YOUR_TEMPLATE_ID", // Replace with your EmailJS template ID
+        "service_n9efrj6", // Replace with your EmailJS service ID
+        "template_rax8qpj", // Replace with your EmailJS template ID
         form,
-        "YOUR_USER_ID" // Replace with your EmailJS user ID
+        "poy2f3j34ZDCQza4v" // Replace with your EmailJS user ID
       );
 
       submitMessage = "Message sent successfully!";
@@ -98,22 +98,24 @@
 
       <div class="flex justify-between items-center pt-4">
         <div class="flex gap-4">
-          <a href="https://twitter.com" class="text-white hover:text-gray-600">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path
-                d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
-              />
-            </svg>
-          </a>
-          <a href="https://github.com" class="text-white hover:text-gray-600">
+          <a
+            href="https://github.com/Nurman2021"
+            class="text-white hover:text-gray-600"
+            target="_blank"
+          >
             <Github class="w-6 h-6" />
           </a>
-          <a href="https://linkedin.com" class="text-white hover:text-gray-600">
+          <a
+            href="www.linkedin.com/in/nurman-awaluddin-368a74353"
+            target="_blank"
+            class="text-white hover:text-gray-600"
+          >
             <Linkedin class="w-6 h-6" />
           </a>
           <a
-            href="mailto:your-email@example.com"
+            href="mailto:nurman.awaluddin2017@gmail.com"
             class="text-white hover:text-gray-600"
+            target="_blank"
           >
             <Mail class="w-6 h-6" />
           </a>

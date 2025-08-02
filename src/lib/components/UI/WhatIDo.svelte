@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import gsap from "gsap";
+  import { Palette, Zap, Code } from "lucide-svelte";
 
   const services = [
     {
@@ -8,7 +9,7 @@
       title: "Designing",
       description:
         "Creating beautiful and intuitive user interfaces with modern design principles",
-      icon: "🎨",
+      icon: Palette,
       technologies: ["figma", "photoshop", "illustrator"],
       color: "#cc4f55",
     },
@@ -17,7 +18,7 @@
       title: "Optimizing",
       description:
         "Enhancing performance and user experience through code optimization and best practices",
-      icon: "⚡",
+      icon: Zap,
       technologies: ["webpack", "vite", "lighthouse"],
       color: "#55cc4f",
     },
@@ -26,7 +27,7 @@
       title: "Developing",
       description:
         "Building interactive web applications using modern frameworks and technologies",
-      icon: "💻",
+      icon: Code,
       technologies: ["svelte", "react", "threejs", "javascript"],
       color: "#4f55cc",
     },
@@ -59,7 +60,7 @@
     {#each services as service}
       <div class="service-card" style="--accent-color: {service.color}">
         <div class="service-icon">
-          {service.icon}
+          <svelte:component this={service.icon} size={48} />
         </div>
 
         <h3 class="service-title">{service.title}</h3>
@@ -107,7 +108,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
-    align-items: start;
+    align-items: stretch;
   }
 
   .service-card {
@@ -121,6 +122,9 @@
     overflow: hidden;
     backdrop-filter: blur(10px);
     opacity: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .service-card::before {
@@ -148,7 +152,10 @@
   .service-icon {
     font-size: 3rem;
     margin-bottom: 1.5rem;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--accent-color);
   }
 
   .service-title {
@@ -165,6 +172,7 @@
     font-size: 0.9rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;
+    flex-grow: 1;
   }
 
   .service-tech {
@@ -172,6 +180,7 @@
     justify-content: center;
     gap: 1rem;
     font-size: 1.5rem;
+    margin-top: auto;
   }
 
   .service-tech i {

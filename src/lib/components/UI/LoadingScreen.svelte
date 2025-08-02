@@ -32,7 +32,7 @@
       <!-- Progress Bar -->
       <div class="progress-container mb-6">
         <div
-          class="progress-bar-bg w-64 h-2 bg-gray-800 rounded-full overflow-hidden"
+          class="progress-bar-bg w-full h-2 bg-gray-800 rounded-full overflow-hidden"
         >
           <div
             class="progress-bar h-full bg-gradient-to-r from-[#cc4f55] to-red-400 transition-all duration-300 ease-out"
