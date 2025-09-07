@@ -54,14 +54,16 @@
   };
 
   const handleLoadComplete = () => {
+    console.log("Scene loading complete");
     sceneLoaded = true;
-    dispatch("loadComplete");
 
-    // Setup ScrollTriggers after scene is loaded
+    // Setup ScrollTriggers and animations after scene loads
     setTimeout(() => {
       setupScrollTriggers();
       initializeSectionAnimations();
     }, 500);
+
+    dispatch("loadComplete");
   };
 
   // Handle window resize for responsive camera positioning
@@ -139,6 +141,8 @@
 
   // Initialize section animations
   const initializeSectionAnimations = (): void => {
+    if (!sceneLoaded) return; // Don't initialize until scene is loaded
+
     // Set initial states - hide all sections except hero
     gsap.set([projectsSection, aboutSection, contactSection], {
       opacity: 0,
@@ -202,6 +206,8 @@
 
   // GSAP ScrollTrigger setup
   const setupScrollTriggers = (): void => {
+    if (!sceneLoaded) return; // Don't setup triggers until scene is loaded
+
     // Clear any existing ScrollTriggers first
     ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 
@@ -653,6 +659,7 @@
   }
 </script>
 
+<!-- 3D Scene -->
 <div class="fixed z-20 w-full h-screen">
   <Canvas>
     <Scene
@@ -662,6 +669,7 @@
   </Canvas>
 </div>
 
+<!-- Main content -->
 <main class="relative z-30">
   <section
     bind:this={heroSection}

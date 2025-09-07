@@ -42,13 +42,7 @@
     as="fetch"
     crossorigin="anonymous"
   />
-  <link
-    rel="preload"
-    href="/fonts/DrukWideBold.ttf"
-    as="font"
-    type="font/ttf"
-    crossorigin="anonymous"
-  />
+  <!-- Font will be loaded naturally when first used -->
 </svelte:head>
 
 <!-- Loading Screen -->

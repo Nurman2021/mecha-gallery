@@ -19,9 +19,18 @@ body{
     background: linear-gradient(180deg, rgba(13, 19, 32, 1) 0%, rgba(8, 12, 21, 1) 100%);
 }
 
+/* Ensure font is used immediately after loading */
+.font-druk, h1, h2, h3, .druk {
+    font-family: 'DrukWideBold', sans-serif;
+    font-display: swap;
+}
+
 @font-face {
-    font-family: DrukWideBold;
+    font-family: 'DrukWideBold';
     src: url("/fonts/DrukWideBold.ttf") format("truetype");
+    font-display: swap; /* Ensures faster font loading */
+    font-weight: normal;
+    font-style: normal;
 }
 
 .swiper-button-next,

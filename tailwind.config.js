@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        druk: "DrukWideBold, sans-serif"
+        druk: ['DrukWideBold', 'sans-serif']
       }
     }
   },

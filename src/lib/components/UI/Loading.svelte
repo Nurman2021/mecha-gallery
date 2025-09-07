@@ -19,8 +19,9 @@
 
 {#if isLoading}
   <div
-    class="loading-screen fixed inset-0 z-50 bg-black flex items-center justify-center"
+    class="loading-screen fixed inset-0 bg-black flex items-center justify-center"
     transition:fade={{ duration: 800 }}
+    style="z-index: 9999;"
   >
     <div class="loading-content text-center">
       <!-- Logo or Brand -->
@@ -72,6 +73,7 @@
   .loading-screen {
     background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
     backdrop-filter: blur(10px);
+    z-index: 9999 !important;
   }
 
   .progress-bar {

@@ -4,11 +4,13 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
 -->
 
 <script lang="ts">
-  import { onDestroy } from "svelte";
+  import { onDestroy, createEventDispatcher } from "svelte";
   import { Group } from "three";
   import { T, forwardEventHandlers } from "@threlte/core";
   import { useGltf, useGltfAnimations } from "@threlte/extras";
   import { idle, idlePose, run, respawn, idleReady } from "../animationState";
+
+  const dispatch = createEventDispatcher();
 
   export const ref = new Group();
 
@@ -17,6 +19,25 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
 
   const gltf = useGltf("/models/Mecha.glb");
   export const { actions, mixer } = useGltfAnimations(gltf, ref);
+
+  // Handle GLTF loading
+  let hasDispatchedLoaded = false;
+
+  async function handleGltfLoad() {
+    try {
+      const loadedGltf = await gltf;
+      if (!hasDispatchedLoaded) {
+        console.log("Mecha GLTF model loaded successfully");
+        dispatch("loaded");
+        hasDispatchedLoaded = true;
+      }
+    } catch (error) {
+      console.error("Error loading Mecha GLTF:", error);
+    }
+  }
+
+  // Start loading check
+  handleGltfLoad();
 
   // Log position and rotation periodically
   let logInterval: number;
@@ -200,6 +221,14 @@ Command: npx @threlte/gltf@2.0.3 ./Mecha.glb --shadows
             geometry={gltf.nodes.Mesh_0_1.geometry}
             material={gltf.materials.Sett_Skin01_MAT}
             skeleton={gltf.nodes.Mesh_0_1.skeleton}
+            on:create={() => {
+              // Dispatch loaded when the mesh is actually created
+              if (!hasDispatchedLoaded) {
+                console.log("Mecha mesh created successfully");
+                dispatch("loaded");
+                hasDispatchedLoaded = true;
+              }
+            }}
           />
           <!--  <T.SkinnedMesh
             name="Mesh_0_2"

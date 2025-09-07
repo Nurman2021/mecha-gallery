@@ -9,40 +9,55 @@
     setTotalAssets,
     incrementAssetLoaded,
     completeLoading,
+    updateProgress,
   } from "$lib/stores/loadingStore";
 
   const dispatch = createEventDispatcher();
 
-  let assetsLoaded = 0;
-  const totalAssetsToLoad = 3; // Mecha model, textures, etc.
+  let mechaLoaded = false;
+  let cameraReady = false;
+  let environmentReady = false;
+
+  // Function to check if all components are ready
+  function checkAllComponentsReady() {
+    if (mechaLoaded && cameraReady && environmentReady) {
+      console.log("All 3D assets loaded successfully");
+      completeLoading(); // Update the store
+      dispatch("loadComplete");
+    }
+  }
+
+  // Handle Mecha model loading
+  function handleMechaLoad() {
+    console.log("Mecha model loaded");
+    mechaLoaded = true;
+    updateProgress(60); // Update store progress
+    dispatch("loadProgress", { progress: 60 });
+    checkAllComponentsReady();
+  }
+
+  // Handle camera setup
+  function handleCameraReady() {
+    console.log("Camera controls ready");
+    cameraReady = true;
+    updateProgress(80); // Update store progress
+    dispatch("loadProgress", { progress: 80 });
+    checkAllComponentsReady();
+  }
 
   onMount(() => {
-    setTotalAssets(totalAssetsToLoad);
+    // Initialize loading
+    updateProgress(0);
+    dispatch("loadProgress", { progress: 0 });
 
-    // Simulate loading various assets
-    const assetNames = ["3D Model", "Textures", "Animations"];
-
-    assetNames.forEach((assetName, index) => {
-      setTimeout(
-        () => {
-          incrementAssetLoaded(assetName);
-          assetsLoaded++;
-
-          // Dispatch progress to parent
-          const progress = (assetsLoaded / totalAssetsToLoad) * 100;
-          dispatch("loadProgress", { progress });
-
-          // Complete loading when all assets are loaded
-          if (assetsLoaded >= totalAssetsToLoad) {
-            setTimeout(() => {
-              completeLoading();
-              dispatch("loadComplete");
-            }, 500);
-          }
-        },
-        (index + 1) * 800
-      ); // Stagger the loading
-    });
+    // Environment setup (lights, floor)
+    setTimeout(() => {
+      console.log("Environment setup complete");
+      environmentReady = true;
+      updateProgress(40); // Update store progress
+      dispatch("loadProgress", { progress: 40 });
+      checkAllComponentsReady();
+    }, 300);
   });
 </script>
 
@@ -59,11 +74,17 @@
       on:create={({ ref }) => {
         // @ts-ignore
         $cameraControls = ref;
+        // Camera is ready after a short delay
+        setTimeout(() => {
+          handleCameraReady();
+        }, 500);
       }}
     />
   </T.PerspectiveCamera>
 </T.Group>
-<Mecha />
+
+<!-- Mecha model with loading handler -->
+<Mecha on:loaded={handleMechaLoad} />
 
 <!-- Floor -->
 <T.Mesh rotation.x={-Math.PI / 2} receiveShadow position.y={0.05}>
