@@ -14,7 +14,6 @@
     idleReady,
     setActiveAnimation,
   } from "$lib/components/3D/animationState";
-  import Swiper from "../UI/Swiper.svelte";
   import WhatIDo from "../UI/WhatIDo.svelte";
   import MyWork from "../UI/MyWork.svelte";
   import ProgressBar from "../UI/ProgressBar.svelte";
@@ -718,13 +717,13 @@
   <section
     bind:this={aboutSection}
     id="about"
-    class="flex flex-col md:flex-row justify-center items-center relative min-h-screen py-8"
+    class="flex flex-col justify-center items-center relative min-h-screen py-8"
     class:active={currentSection === "about"}
   >
-    <div class="w-full md:w-1/2 animate-in flex justify-center p-4 md:p-0">
+    <div class="w-full animate-in flex justify-center p-4 mb-20">
       <ProgressBar />
     </div>
-    <div class="w-full md:w-1/2 animate-in">
+    <div class="w-full animate-in">
       <MyExperience />
     </div>
   </section>

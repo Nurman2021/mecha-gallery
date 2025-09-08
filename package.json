@@ -31,8 +31,6 @@
     "camera-controls": "^2.9.0",
     "gsap": "^3.12.5",
     "lucide-svelte": "^0.469.0",
-    "svelte-tweakpane-ui": "^1.5.1",
-    "swiper": "^8.4.6",
     "three": "^0.159.0"
   }
 }

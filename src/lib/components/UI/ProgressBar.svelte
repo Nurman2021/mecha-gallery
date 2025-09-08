@@ -1,5 +1,7 @@
 <div class="w-full max-w-lg bg-gray-700/50 md:bg-transparent p-4 rounded-2xl">
-  <h2 class="text-white font-druk text-2xl mb-8 text-left hidden md:block">
+  <h2
+    class="text-white font-druk text-2xl md:text-4xl mb-8 text-left hidden md:block"
+  >
     MY TOOL
   </h2>
   <div class="space-y-6 text-white text-left">
