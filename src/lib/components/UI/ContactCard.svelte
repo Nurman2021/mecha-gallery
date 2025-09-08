@@ -42,16 +42,16 @@
 </script>
 
 <div class="text-center">
-  <h2 class="text-white font-druk text-2xl mb-8 invisible md:visible">
+  <h2 class="contact-title font-druk text-2xl mb-8 invisible md:visible">
     GET IN TOUCH
   </h2>
 
   <div
-    class="bg-black rounded-2xl p-4 border-[#68151D] border-2 mb-4 flex gap-4 invisible md:visible"
+    class="profile-card rounded-2xl p-4 border-2 mb-4 flex gap-4 invisible md:visible"
   >
     <div class="text-left my-8">
-      <h1 class="text-white font-bold text-4xl">Hi, I'm Nurman 👋</h1>
-      <h4 class="text-white">
+      <h1 class="profile-name font-bold text-4xl">Hi, I'm Nurman 👋</h1>
+      <h4 class="profile-description">
         Frontend Developer. I love building things that make difference.
       </h4>
     </div>
@@ -64,7 +64,7 @@
   </div>
 
   <!-- Contact Form -->
-  <div class="bg-black p-6 border-2 border-[#68151D] rounded-2xl">
+  <div class="contact-form p-6 border-2 rounded-2xl">
     <form bind:this={form} on:submit={handleSubmit} class="space-y-4">
       <div>
         <input
@@ -72,7 +72,7 @@
           name="name"
           placeholder="Name :"
           required
-          class="w-full p-4 bg-neutral-800 border-none rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-red-400"
+          class="form-input w-full p-4 border-none rounded-lg focus:outline-none focus:ring-2"
         />
       </div>
 
@@ -82,7 +82,7 @@
           name="email"
           placeholder="Email :"
           required
-          class="w-full p-4 bg-neutral-800 border-none rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-red-400"
+          class="form-input w-full p-4 border-none rounded-lg focus:outline-none focus:ring-2"
         />
       </div>
 
@@ -92,7 +92,7 @@
           placeholder="Message :"
           required
           rows="6"
-          class="w-full p-4 bg-neutral-800 border-none rounded-lg text-white placeholder-white resize-none focus:outline-none focus:ring-2 focus:ring-red-400"
+          class="form-input w-full p-4 border-none rounded-lg resize-none focus:outline-none focus:ring-2"
         ></textarea>
       </div>
 
@@ -100,7 +100,7 @@
         <div class="flex gap-4">
           <a
             href="https://github.com/Nurman2021"
-            class="text-white hover:text-gray-600"
+            class="social-link"
             target="_blank"
           >
             <Github class="w-6 h-6" />
@@ -108,13 +108,13 @@
           <a
             href="www.linkedin.com/in/nurman-awaluddin-368a74353"
             target="_blank"
-            class="text-white hover:text-gray-600"
+            class="social-link"
           >
             <Linkedin class="w-6 h-6" />
           </a>
           <a
             href="mailto:nurman.awaluddin2017@gmail.com"
-            class="text-white hover:text-gray-600"
+            class="social-link"
             target="_blank"
           >
             <Mail class="w-6 h-6" />
@@ -124,7 +124,7 @@
         <button
           type="submit"
           disabled={isSubmitting}
-          class="bg-[#68151D] hover:bg-red-600 disabled:bg-red-300 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
+          class="submit-button px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
         >
           {isSubmitting ? "Sending..." : "Submit"}
         </button>
@@ -134,8 +134,8 @@
         <div class="text-center mt-4">
           <p
             class={submitMessage.includes("success")
-              ? "text-green-600"
-              : "text-red-600"}
+              ? "submit-success"
+              : "submit-error"}
           >
             {submitMessage}
           </p>
@@ -144,3 +144,98 @@
     </form>
   </div>
 </div>
+
+<style>
+  .contact-title {
+    color: var(--text-color);
+  }
+
+  .profile-card {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #68151d;
+    backdrop-filter: blur(10px);
+  }
+
+  :global(.light-theme) .profile-card {
+    background: rgba(245, 241, 235, 0.9);
+    border-color: rgba(139, 127, 115, 0.3);
+  }
+
+  .profile-name {
+    color: var(--text-color);
+  }
+
+  .profile-description {
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+
+  .contact-form {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #68151d;
+    backdrop-filter: blur(10px);
+  }
+
+  :global(.light-theme) .contact-form {
+    background: rgba(245, 241, 235, 0.9);
+    border-color: rgba(139, 127, 115, 0.3);
+  }
+
+  .form-input {
+    background: rgba(64, 64, 64, 0.8);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+  }
+
+  :global(.light-theme) .form-input {
+    background: rgba(139, 127, 115, 0.1);
+  }
+
+  .form-input::placeholder {
+    color: var(--text-color);
+    opacity: 0.7;
+  }
+
+  .form-input:focus {
+    ring-color: var(--primary-color);
+  }
+
+  .social-link {
+    color: var(--text-color);
+    transition: all 0.3s ease;
+  }
+
+  .social-link:hover {
+    color: var(--primary-color);
+    transform: translateY(-2px);
+  }
+
+  .submit-button {
+    background: #68151d;
+    color: white;
+    transition: all 0.3s ease;
+  }
+
+  :global(.light-theme) .submit-button {
+    background: #f7b500;
+  }
+
+  .submit-button:hover {
+    background: var(--primary-color);
+    transform: translateY(-2px);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .submit-success {
+    color: #10b981;
+  }
+
+  .submit-error {
+    color: var(--primary-color);
+  }
+</style>

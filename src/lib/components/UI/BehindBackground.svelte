@@ -43,13 +43,13 @@
 <div class="text-center fixed z-10 w-full">
   {#if $activeSection === "hero"}
     <h1
-      class="text-white mt-4 text-7xl md:text-[8.5rem] font-extrabold font-druk px-4"
+      class="mt-4 text-7xl md:text-[8.5rem] font-extrabold font-druk px-4 text-color"
     >
       HELLO;
     </h1>
   {:else if $activeSection === "projects"}
     <div
-      class="w-full md:w-3/5 flex h-screen justify-center md:justify-end bg-[#68151D] p-4"
+      class="w-full md:w-3/5 flex h-screen justify-center md:justify-end bg-primary-dark p-4"
     >
       <h1 class="text-outline text-6xl md:text-9xl font-druk text-center">
         PRO<br />JECT
@@ -73,7 +73,9 @@
       </div>
     </div>
   {:else if $activeSection === "contact"}
-    <div class="w-full md:w-3/5 flex bg-[#68151D] h-screen justify-center p-4">
+    <div
+      class="w-full md:w-3/5 flex bg-primary-dark h-screen justify-center p-4"
+    >
       <h1 class="text-outline text-6xl md:text-9xl font-druk text-center">
         L<br />E<br />T<br />S
       </h1>

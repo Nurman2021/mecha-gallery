@@ -71,14 +71,7 @@
 
         <div class="service-tech">
           {#each service.technologies as tech}
-            <i
-              class="devicon-{tech}-{tech === 'javascript' ||
-              tech === 'webpack' ||
-              tech === 'vite' ||
-              tech === 'lighthouse'
-                ? 'plain'
-                : 'original'}"
-            ></i>
+            <span class="tech-name">{tech}</span>
           {/each}
         </div>
       </div>
@@ -97,7 +90,7 @@
   .section-title {
     font-family: "Druk", sans-serif;
     font-size: 2.5rem;
-    color: white;
+    color: var(--text-color);
     text-align: center;
     margin-bottom: 3rem;
     text-transform: uppercase;
@@ -112,8 +105,8 @@
   }
 
   .service-card {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
-    border: 2px solid #68151d;
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
     padding: 2rem;
     text-align: center;
@@ -125,6 +118,13 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+  }
+
+  /* Light theme cards */
+  :global(.light-theme) .service-card {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(139, 127, 115, 0.2);
+    box-shadow: 0 4px 20px rgba(139, 127, 115, 0.1);
   }
 
   .service-card::before {
@@ -146,7 +146,16 @@
   .service-card:hover {
     transform: translateY(-10px);
     border-color: var(--accent-color);
+  }
+
+  /* Dark theme hover */
+  :global(.dark-theme) .service-card:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Light theme hover */
+  :global(.light-theme) .service-card:hover {
+    box-shadow: 0 20px 40px rgba(139, 127, 115, 0.2);
   }
 
   .service-icon {
@@ -168,30 +177,45 @@
   }
 
   .service-description {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-color);
+    opacity: 0.8;
     font-size: 0.9rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;
     flex-grow: 1;
   }
 
+  :global(.light-theme) .service-description {
+    opacity: 0.7;
+  }
+
   .service-tech {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     justify-content: center;
-    gap: 1rem;
-    font-size: 1.5rem;
     margin-top: auto;
   }
 
-  .service-tech i {
-    opacity: 0.7;
+  .tech-name {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 500;
     transition: all 0.3s ease;
   }
 
-  .service-tech i:hover {
-    opacity: 1;
-    transform: scale(1.2);
-    color: var(--accent-color);
+  :global(.light-theme) .tech-name {
+    background: rgba(139, 127, 115, 0.1);
+  }
+
+  .tech-name:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
   }
 
   /* Mobile responsive */

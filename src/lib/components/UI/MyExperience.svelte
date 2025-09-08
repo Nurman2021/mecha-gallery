@@ -119,13 +119,6 @@
             <div class="experience-tech">
               {#each experience.technologies as tech}
                 <span class="tech-badge">
-                  <i
-                    class="devicon-{tech}-{tech === 'nodejs' ||
-                    tech === 'typescript' ||
-                    tech === 'wordpress'
-                      ? 'plain'
-                      : 'original'}"
-                  ></i>
                   {tech}
                 </span>
               {/each}
@@ -148,7 +141,7 @@
   .section-title {
     font-family: "Druk", sans-serif;
     font-size: 2.5rem;
-    color: white;
+    color: var(--text-color);
     text-align: center;
     margin-bottom: 3rem;
     text-transform: uppercase;
@@ -166,9 +159,21 @@
     top: 0;
     width: 4px;
     height: 0;
-    background: linear-gradient(180deg, #cc4f55, #68151d);
+    background: linear-gradient(
+      180deg,
+      var(--primary-color),
+      var(--primary-color)
+    );
     transform: translateX(-50%);
     border-radius: 2px;
+  }
+
+  :global(.dark-theme) .timeline-line {
+    background: linear-gradient(180deg, #cc4f55, #68151d);
+  }
+
+  :global(.light-theme) .timeline-line {
+    background: linear-gradient(180deg, #f7b500, #e6a500);
   }
 
   .timeline-item {
@@ -195,14 +200,19 @@
   .marker-dot {
     width: 20px;
     height: 20px;
-    background: #cc4f55;
-    border: 4px solid #000;
+    background: var(--primary-color);
+    border: 4px solid var(--bg-start);
     border-radius: 50%;
     box-shadow: 0 0 20px rgba(204, 79, 85, 0.5);
+    transition: all 0.3s ease;
+  }
+
+  :global(.light-theme) .marker-dot {
+    box-shadow: 0 0 20px rgba(247, 181, 0, 0.5);
   }
 
   .marker-year {
-    background: #cc4f55;
+    background: var(--primary-color);
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 1rem;
@@ -236,10 +246,23 @@
     backdrop-filter: blur(10px);
   }
 
+  :global(.light-theme) .experience-card {
+    background: linear-gradient(
+      135deg,
+      rgba(245, 241, 235, 0.9),
+      rgba(232, 224, 214, 0.8)
+    );
+    border: 2px solid rgba(139, 127, 115, 0.3);
+  }
+
   .experience-card:hover {
     transform: translateY(-5px);
-    border-color: #cc4f55;
+    border-color: var(--primary-color);
     box-shadow: 0 20px 40px rgba(204, 79, 85, 0.2);
+  }
+
+  :global(.light-theme) .experience-card:hover {
+    box-shadow: 0 20px 40px rgba(247, 181, 0, 0.2);
   }
 
   .experience-header {
@@ -249,21 +272,23 @@
   .experience-title {
     font-family: "Druk", sans-serif;
     font-size: 1.3rem;
-    color: #cc4f55;
+    color: var(--primary-color);
     margin: 0 0 0.5rem 0;
     text-transform: uppercase;
     letter-spacing: 1px;
   }
 
   .experience-company {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-color);
+    opacity: 0.9;
     font-size: 1rem;
     margin: 0;
     font-weight: 500;
   }
 
   .experience-description {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-color);
+    opacity: 0.8;
     font-size: 0.9rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;
@@ -274,7 +299,7 @@
   }
 
   .experience-achievements h4 {
-    color: white;
+    color: var(--text-color);
     font-size: 0.9rem;
     margin: 0 0 0.8rem 0;
     font-weight: 600;
@@ -287,7 +312,8 @@
   }
 
   .experience-achievements li {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-color);
+    opacity: 0.8;
     font-size: 0.85rem;
     padding: 0.3rem 0;
     position: relative;
@@ -296,7 +322,7 @@
 
   .experience-achievements li::before {
     content: "▸";
-    color: #cc4f55;
+    color: var(--primary-color);
     position: absolute;
     left: 0;
     font-weight: bold;
@@ -314,16 +340,23 @@
     gap: 0.3rem;
     background: rgba(204, 79, 85, 0.1);
     border: 1px solid rgba(204, 79, 85, 0.3);
-    color: white;
+    color: var(--text-color);
     padding: 0.4rem 0.8rem;
     border-radius: 0.5rem;
     font-size: 0.75rem;
     text-transform: uppercase;
     font-weight: 500;
+    transition: all 0.3s ease;
   }
 
-  .tech-badge i {
-    font-size: 1rem;
+  :global(.light-theme) .tech-badge {
+    background: rgba(247, 181, 0, 0.1);
+    border: 1px solid rgba(247, 181, 0, 0.3);
+  }
+
+  .tech-badge:hover {
+    background: var(--primary-color);
+    color: white;
   }
 
   /* Mobile responsive */

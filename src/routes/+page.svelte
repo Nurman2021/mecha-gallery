@@ -2,10 +2,17 @@
   import "../app.css";
   import App from "$lib/components/3D/App.svelte";
   import BehindBackground from "$lib/components/UI/BehindBackground.svelte";
-  import LoadingScreen from "$lib/components/UI/LoadingScreen.svelte";
+  import Loading from "$lib/components/UI/Loading.svelte";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { loadingStore, resetLoading } from "$lib/stores/loadingStore";
+  import { theme } from "$lib/stores/themeStore";
+
+  // Accept SvelteKit data prop
+  export const data = {};
+
+  // Prevent unused prop warning
+  $: void data;
 
   let pageLoaded = false;
   let isContentReady = false;
@@ -25,6 +32,9 @@
   onMount(() => {
     // Reset loading state
     resetLoading();
+
+    // Initialize theme from store (will apply saved theme)
+    $theme; // This triggers the theme store subscription
 
     // Ensure DOM is ready
     pageLoaded = true;
@@ -46,7 +56,7 @@
 </svelte:head>
 
 <!-- Loading Screen -->
-<LoadingScreen
+<Loading
   isLoading={$loadingStore.isLoading}
   progress={$loadingStore.progress}
 />

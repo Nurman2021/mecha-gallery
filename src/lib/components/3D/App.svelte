@@ -19,6 +19,7 @@
   import ProgressBar from "../UI/ProgressBar.svelte";
   import MyExperience from "../UI/MyExperience.svelte";
   import ContactCard from "../UI/ContactCard.svelte";
+  import ThemeToggle from "../UI/ThemeToggle.svelte";
   import { getCameraConfig } from "$lib/configs/cameraConfig";
 
   gsap.registerPlugin(ScrollTrigger);
@@ -658,6 +659,9 @@
   }
 </script>
 
+<!-- Theme Toggle Button -->
+<ThemeToggle />
+
 <!-- 3D Scene -->
 <div class="fixed z-20 w-full h-screen">
   <Canvas>
@@ -677,17 +681,17 @@
     class:active={currentSection === "hero"}
   >
     <div class="flex justify-between w-full md:w-1/2 px-4 md:px-0">
-      <p class="text-white font-druk text-xs md:text-sm animate-in">
+      <p class="text-theme font-druk text-xs md:text-sm animate-in">
         Let's <br /> Drive
       </p>
-      <p class="text-white font-druk text-xs md:text-sm animate-in">
+      <p class="text-theme font-druk text-xs md:text-sm animate-in">
         I'm Painting <br /> on
-        <span class="text-[#cc4f55]">&lt;canvas/&gt;</span>
+        <span class="text-primary">&lt;canvas/&gt;</span>
       </p>
     </div>
 
     <p
-      class="text-white font-light bottom-4 md:bottom-0 flex flex-col items-center absolute animate-bounce animate-in"
+      class="text-theme font-light bottom-4 md:bottom-0 flex flex-col items-center absolute animate-bounce animate-in"
     >
       Scroll down
       <ChevronDown size={24} />

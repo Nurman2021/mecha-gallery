@@ -2,24 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-/* *{
-    border: solid 1px yellow;
-} */
-
-
 html {
     scroll-behavior: smooth;
-  }
-  
-body{
-    background: rgb(13, 19, 32);
-    background: linear-gradient(180deg, rgba(13, 19, 32, 1) 0%, rgba(8, 12, 21, 1) 100%);
 }
 
-/* Ensure font is used immediately after loading */
+/* CSS Variables untuk Theme */
+:root {
+  --primary-color: #cc4f55;
+  --primary-dark: #68151D;
+  --text-color: white;
+  --bg-start: rgb(13, 19, 32);
+  --bg-end: rgb(8, 12, 21);
+}
+
+.light-theme {
+  --primary-color: #f7b500;       
+  --primary-dark: #d19900;        
+  --text-color: #2d2d2d;           
+  --bg-start: rgb(245, 241, 235);  
+  --bg-end: rgb(232, 224, 214);  
+}
+
+.dark-theme {
+  --primary-color: #cc4f55;
+  --primary-dark: #68151D;
+  --text-color: white;
+  --bg-start: rgb(13, 19, 32);
+  --bg-end: rgb(8, 12, 21);
+}
+
+/* Apply theme variables */
+body {
+    background: var(--bg-start);
+    background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
+    color: var(--text-color);
+    transition: background 0.5s ease, color 0.3s ease;
+}
+
+/* Font configurations */
 .font-druk, h1, h2, h3, .druk {
     font-family: 'DrukWideBold', sans-serif;
     font-display: swap;
@@ -28,84 +48,41 @@ body{
 @font-face {
     font-family: 'DrukWideBold';
     src: url("/fonts/DrukWideBold.ttf") format("truetype");
-    font-display: swap; /* Ensures faster font loading */
+    font-display: swap;
     font-weight: normal;
     font-style: normal;
 }
 
-.swiper-button-next,
-.swiper-button-prev {
-    background-color: white;
-    background-color: rgba(255, 255, 255, 0.5);
-    right:10px;
-    padding: 30px;
-    color: #000 !important;
-    fill: black !important;
-    stroke: black !important;
-    border-radius: 50%;
-  
+/* Theme-aware utility classes */
+.text-primary {
+  color: var(--primary-color);
 }
 
-/* Change the arrow icon */
-.swiper-button-next::after,
-.swiper-button-prev::after {
-  font-size: 1.5rem !important;
-  font-weight: bold;
-  
-}
-.swiper-slide.swiper-slide-active img,
-.swiper-slide.swiper-slide-duplicate-active img {
-    /* transform: scale(1); */
-    /* -webkit-transition : -webkit-filter 500ms linear; */
-    filter: none;
-    opacity: 1;
+.text-theme {
+  color: var(--text-color);
 }
 
-.swiper-slide{
-    opacity: 0.5;
-    transform: scale(0.9);
+.bg-primary {
+  background-color: var(--primary-color);
 }
 
-.swiper-slide.swiper-slide-active{
-    opacity: 1;
-        transform: scale(1);
-
+.border-primary {
+  border-color: var(--primary-color);
 }
 
-.text-outline{
-     /* Text Shadow Property */
+/* ✅ FIXED: Remove duplicate, use only CSS variables */
+.text-outline {
   -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: white;
-
+  -webkit-text-stroke-color: var(--text-color);
   color: transparent;
 }
 
-.text-outline-red{
-    /* Text Shadow Property */
- -webkit-text-stroke-width: 1px;
- -webkit-text-stroke-color: #8c1722;
-
- color: transparent;
+.text-outline-red {
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: var(--primary-color);
+  color: transparent;
 }
 
-.swiper-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: 2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    /* -webkit-transition: 3s -webkit-filter linear;
-    -moz-transition: 3s -moz-filter linear;
-    -moz-transition: 3s filter linear;
-    -ms-transition: 3s -ms-filter linear;
-    -o-transition: 3s -o-filter linear;
-    transition: 3s filter linear, 3s -webkit-filter linear; */
-    /* opacity: .5; */
-    border-radius: 1rem;
-    transform: scale(0.9);
-}
-
-
-
-/* .swiper-slide{
-    max-width: 200px;
-} */
+/* ❌ REMOVE DUPLICATES - Ini yang menyebabkan override! */
+/* .text-outline { ... } */
+/* .text-outline-red { ... } */

@@ -1,22 +1,23 @@
 <script lang="ts">
-  import { T, useFrame } from "@threlte/core";
+  import { T } from "@threlte/core";
   import CameraControls from "./camera/CameraControls.svelte";
   import { cameraControls } from "./camera/stores";
   import Mecha from "./models/Mecha.svelte";
   import { onMount, createEventDispatcher } from "svelte";
-  import {
-    loadingStore,
-    setTotalAssets,
-    incrementAssetLoaded,
-    completeLoading,
-    updateProgress,
-  } from "$lib/stores/loadingStore";
+  import { completeLoading, updateProgress } from "$lib/stores/loadingStore";
+  import { theme } from "$lib/stores/themeStore";
 
   const dispatch = createEventDispatcher();
 
   let mechaLoaded = false;
   let cameraReady = false;
   let environmentReady = false;
+
+  // Reactive floor color based on theme
+  $: floorColor = $theme === "light" ? "#ffcc00" : "#cc4f55";
+
+  // Reactive ambient light intensity based on theme
+  $: ambientIntensity = $theme === "light" ? 0.9 : 0.3;
 
   // Function to check if all components are ready
   function checkAllComponentsReady() {
@@ -86,11 +87,11 @@
 <!-- Mecha model with loading handler -->
 <Mecha on:loaded={handleMechaLoad} />
 
-<!-- Floor -->
+<!-- Floor - responsive to theme -->
 <T.Mesh rotation.x={-Math.PI / 2} receiveShadow position.y={0.05}>
   <T.CircleGeometry args={[2.2, 40]} />
-  <T.MeshStandardMaterial color="#cc4f55" />
+  <T.MeshStandardMaterial color={floorColor} />
 </T.Mesh>
 
 <T.DirectionalLight intensity={0.9} position={[8, 6, 6]} castShadow />
-<T.AmbientLight intensity={0.3} />
+<T.AmbientLight intensity={ambientIntensity} />

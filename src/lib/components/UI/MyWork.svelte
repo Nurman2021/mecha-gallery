@@ -89,7 +89,7 @@
 
         <div class="project-content">
           <div class="project-header">
-            <h3 class="text-[#cc4f55] font-druk text-lg">{project.title}</h3>
+            <h3 class="project-title font-druk text-lg">{project.title}</h3>
             <div class="project-links">
               <a
                 href={project.liveUrl}
@@ -110,16 +110,13 @@
             </div>
           </div>
 
-          <p class="text-white text-left text-sm">{project.description}</p>
+          <p class="project-description text-left text-sm">
+            {project.description}
+          </p>
 
           <div class="project-tech">
             {#each project.technologies as tech}
               <span class="tech-tag">
-                <i
-                  class="devicon-{tech}-{tech === 'nextjs'
-                    ? 'original'
-                    : 'plain'}"
-                ></i>
                 {tech}
               </span>
             {/each}
@@ -141,7 +138,7 @@
   .section-title {
     font-family: "Druk", sans-serif;
     font-size: 2.5rem;
-    color: white;
+    color: var(--text-color);
     text-align: center;
     margin-bottom: 3rem;
     text-transform: uppercase;
@@ -157,8 +154,8 @@
   }
 
   .project-card {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
-    border: 2px solid #68151d;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
     overflow: hidden;
     position: relative;
@@ -167,10 +164,26 @@
     cursor: pointer;
   }
 
+  /* Light theme project cards */
+  :global(.light-theme) .project-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(139, 127, 115, 0.2);
+    box-shadow: 0 4px 20px rgba(139, 127, 115, 0.1);
+  }
+
   .project-card:hover {
     transform: translateY(-5px);
-    border-color: #cc4f55;
+    border-color: var(--primary-color);
+  }
+
+  /* Dark theme hover */
+  :global(.dark-theme) .project-card:hover {
     box-shadow: 0 20px 40px rgba(204, 79, 85, 0.2);
+  }
+
+  /* Light theme hover */
+  :global(.light-theme) .project-card:hover {
+    box-shadow: 0 20px 40px rgba(247, 181, 0, 0.2);
   }
 
   /* Bento Grid Sizes */
@@ -248,13 +261,22 @@
     margin-bottom: 0.5rem;
   }
 
+  .project-title {
+    color: var(--primary-color);
+  }
+
+  .project-description {
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+
   .project-links {
     display: flex;
     gap: 0.5rem;
   }
 
   .project-link {
-    color: white;
+    color: var(--text-color);
     padding: 0.5rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 0.5rem;
@@ -262,6 +284,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  :global(.light-theme) .project-link {
+    border: 1px solid rgba(139, 127, 115, 0.3);
+  }
+
+  .project-link:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
   }
 
   .project-tech {
@@ -276,21 +307,27 @@
     align-items: center;
     gap: 0.3rem;
     background: rgba(255, 255, 255, 0.1);
-    color: white;
+    color: var(--text-color);
     padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
     font-size: 0.75rem;
     text-transform: uppercase;
     font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  :global(.light-theme) .tech-tag {
+    background: rgba(139, 127, 115, 0.1);
+  }
+
+  .tech-tag:hover {
+    background: var(--primary-color);
+    color: white;
   }
 
   .project-card.small .tech-tag {
     font-size: 0.7rem;
     padding: 0.2rem 0.4rem;
-  }
-
-  .tech-tag i {
-    font-size: 1rem;
   }
 
   /* Mobile responsive */
@@ -315,6 +352,11 @@
       grid-column: 1 !important;
       grid-row: auto !important;
       min-height: 300px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    :global(.light-theme) .project-card {
+      background: rgba(139, 127, 115, 0.15);
     }
 
     .project-card.small {
