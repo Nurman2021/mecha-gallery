@@ -197,7 +197,7 @@
   }
 
   .form-input:focus {
-    ring-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
   }
 
   .social-link {
