@@ -13,6 +13,7 @@
       liveUrl: "https://starwars-helmet.vercel.app/",
       repoUrl: "https://github.com/Nurman2021/starwars-helmet",
       size: "large",
+      category: "frontend-dev",
     },
     {
       id: 2,
@@ -23,6 +24,7 @@
       liveUrl: "https://www.dermasense.skin",
       repoUrl: "https://github.com/Nurman2021/dermasense_web_app",
       size: "medium",
+      category: "sveltekit",
     },
     {
       id: 3,
@@ -33,6 +35,7 @@
       liveUrl: "https://algo-coffee.vercel.app/",
       repoUrl: "https://github.com/Nurman2021/algoCoffee",
       size: "medium",
+      category: "sveltekit",
     },
     {
       id: 4,
@@ -43,6 +46,7 @@
       liveUrl: "https://algo-coffee.vercel.app/",
       repoUrl: "https://github.com/Nurman2021/zafatrans-clone",
       size: "small",
+      category: "nextjs",
     },
     {
       id: 5,
@@ -53,10 +57,65 @@
       liveUrl: "https://algo-coffee.vercel.app/",
       repoUrl: "https://github.com/Nurman2021/zafatrans-clone",
       size: "small",
+      category: "nextjs",
     },
   ];
 
+  // Tab system
+  const tabs = [
+    { id: "frontend-dev", label: "Frontend Dev", count: projects.length },
+    { id: "sveltekit", label: "SvelteKit", count: projects.filter(p => p.category === "sveltekit").length },
+    { id: "nextjs", label: "Next.js", count: projects.filter(p => p.category === "nextjs").length },
+  ];
+
+  let activeTab = "frontend-dev";
   let container: HTMLElement;
+  let isAnimating = false;
+
+  // Reactive filtered projects
+  $: filteredProjects = activeTab === "frontend-dev" 
+    ? projects 
+    : projects.filter(project => project.category === activeTab);
+
+  // Tab switching function
+  const switchTab = async (tabId: string) => {
+    if (tabId === activeTab || isAnimating) return;
+    
+    isAnimating = true;
+
+    // Animate out current projects
+    await gsap.to(container.querySelectorAll(".project-card"), {
+      opacity: 0,
+      scale: 0.8,
+      rotationY: -45,
+      duration: 0.4,
+      stagger: 0.05,
+      ease: "power2.in"
+    });
+
+    // Switch tab
+    activeTab = tabId;
+
+    // Wait for DOM update
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    // Animate in new projects
+    gsap.fromTo(
+      container.querySelectorAll(".project-card"),
+      { opacity: 0, scale: 0.8, rotationY: 45 },
+      {
+        opacity: 1,
+        scale: 1,
+        rotationY: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out",
+        onComplete: () => {
+          isAnimating = false;
+        }
+      }
+    );
+  };
 
   onMount(() => {
     // Animate project cards on mount
@@ -79,8 +138,24 @@
 <div bind:this={container} class="my-work-container">
   <h2 class="section-title">My Work</h2>
 
+  <!-- Tab Navigation -->
+  <div class="tab-container">
+    {#each tabs as tab}
+      <button
+        class="tab-button"
+        class:active={activeTab === tab.id}
+        class:disabled={isAnimating}
+        on:click={() => switchTab(tab.id)}
+      >
+        {tab.label}
+        <span class="tab-count">({tab.count})</span>
+      </button>
+    {/each}
+  </div>
+
+  <!-- Projects Grid -->
   <div class="bento-grid">
-    {#each projects as project}
+    {#each filteredProjects as project (project.id)}
       <div class="project-card {project.size}">
         <div class="project-image">
           <img src={project.image} alt={project.title} />
@@ -140,9 +215,70 @@
     font-size: 2.5rem;
     color: var(--text-color);
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     text-transform: uppercase;
     letter-spacing: 2px;
+  }
+
+  /* Tab System Styles */
+  .tab-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+    padding: 0.8rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+  }
+
+  :global(.light-theme) .tab-button {
+    background: rgba(139, 127, 115, 0.1);
+    border: 2px solid rgba(139, 127, 115, 0.3);
+  }
+
+  .tab-button:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--primary-color);
+  }
+
+  :global(.light-theme) .tab-button:hover:not(.disabled) {
+    background: rgba(139, 127, 115, 0.2);
+  }
+
+  .tab-button.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+  }
+
+  .tab-button.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .tab-count {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    font-weight: 500;
+  }
+
+  .tab-button.active .tab-count {
+    opacity: 1;
   }
 
   .bento-grid {
@@ -338,7 +474,17 @@
 
     .section-title {
       font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-container {
+      gap: 0.5rem;
       margin-bottom: 2rem;
+    }
+
+    .tab-button {
+      padding: 0.6rem 1rem;
+      font-size: 0.8rem;
     }
 
     .bento-grid {
